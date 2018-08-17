@@ -31,59 +31,58 @@ namespace {
 
 // Make sure that the counts returned for a specific range match what's
 // expected. In particular, make sure that it fits with Table C.2.7
-// Disabled. bug: 112691516
-// TEST(ASTCIntegerSequenceCodecTest, TestGetCountsForRange) {
-//   std::array<int, 3> kExpectedCounts[31] = {
-//     {{ 0, 0, 1 }},  // 1
-//     {{ 1, 0, 0 }},  // 2
-//     {{ 0, 0, 2 }},  // 3
-//     {{ 0, 1, 0 }},  // 4
-//     {{ 1, 0, 1 }},  // 5
-//     {{ 0, 0, 3 }},  // 6
-//     {{ 0, 0, 3 }},  // 7
-//     {{ 0, 1, 1 }},  // 8
-//     {{ 0, 1, 1 }},  // 9
-//     {{ 1, 0, 2 }},  // 10
-//     {{ 1, 0, 2 }},  // 11
-//     {{ 0, 0, 4 }},  // 12
-//     {{ 0, 0, 4 }},  // 13
-//     {{ 0, 0, 4 }},  // 14
-//     {{ 0, 0, 4 }},  // 15
-//     {{ 0, 1, 2 }},  // 16
-//     {{ 0, 1, 2 }},  // 17
-//     {{ 0, 1, 2 }},  // 18
-//     {{ 0, 1, 2 }},  // 19
-//     {{ 1, 0, 3 }},  // 20
-//     {{ 1, 0, 3 }},  // 21
-//     {{ 1, 0, 3 }},  // 22
-//     {{ 1, 0, 3 }},  // 23
-//     {{ 0, 0, 5 }},  // 24
-//     {{ 0, 0, 5 }},  // 25
-//     {{ 0, 0, 5 }},  // 26
-//     {{ 0, 0, 5 }},  // 27
-//     {{ 0, 0, 5 }},  // 28
-//     {{ 0, 0, 5 }},  // 29
-//     {{ 0, 0, 5 }},  // 30
-//     {{ 0, 0, 5 }},  // 31
-//   };
-// 
-//   int t, q, b;
-//   for (int i = 1; i < 32; ++i) {
-//     IntegerSequenceCodec::GetCountsForRange(i, &t, &q, &b);
-//     EXPECT_EQ(t, kExpectedCounts[i - 1][0]);
-//     EXPECT_EQ(q, kExpectedCounts[i - 1][1]);
-//     EXPECT_EQ(b, kExpectedCounts[i - 1][2]);
-//   }
-// 
-//   ASSERT_DEBUG_DEATH(IntegerSequenceCodec::GetCountsForRange(0, &t, &q, &b), "");
-//   ASSERT_DEBUG_DEATH(
-//       IntegerSequenceCodec::GetCountsForRange(256, &t, &q, &b), "");
-// 
-//   IntegerSequenceCodec::GetCountsForRange(1, &t, &q, &b);
-//   EXPECT_EQ(t, 0);
-//   EXPECT_EQ(q, 0);
-//   EXPECT_EQ(b, 1);
-// }
+TEST(ASTCIntegerSequenceCodecTest, TestGetCountsForRange) {
+  std::array<int, 3> kExpectedCounts[31] = {
+    {{ 0, 0, 1 }},  // 1
+    {{ 1, 0, 0 }},  // 2
+    {{ 0, 0, 2 }},  // 3
+    {{ 0, 1, 0 }},  // 4
+    {{ 1, 0, 1 }},  // 5
+    {{ 0, 0, 3 }},  // 6
+    {{ 0, 0, 3 }},  // 7
+    {{ 0, 1, 1 }},  // 8
+    {{ 0, 1, 1 }},  // 9
+    {{ 1, 0, 2 }},  // 10
+    {{ 1, 0, 2 }},  // 11
+    {{ 0, 0, 4 }},  // 12
+    {{ 0, 0, 4 }},  // 13
+    {{ 0, 0, 4 }},  // 14
+    {{ 0, 0, 4 }},  // 15
+    {{ 0, 1, 2 }},  // 16
+    {{ 0, 1, 2 }},  // 17
+    {{ 0, 1, 2 }},  // 18
+    {{ 0, 1, 2 }},  // 19
+    {{ 1, 0, 3 }},  // 20
+    {{ 1, 0, 3 }},  // 21
+    {{ 1, 0, 3 }},  // 22
+    {{ 1, 0, 3 }},  // 23
+    {{ 0, 0, 5 }},  // 24
+    {{ 0, 0, 5 }},  // 25
+    {{ 0, 0, 5 }},  // 26
+    {{ 0, 0, 5 }},  // 27
+    {{ 0, 0, 5 }},  // 28
+    {{ 0, 0, 5 }},  // 29
+    {{ 0, 0, 5 }},  // 30
+    {{ 0, 0, 5 }},  // 31
+  };
+
+  int t, q, b;
+  for (int i = 1; i < 32; ++i) {
+    IntegerSequenceCodec::GetCountsForRange(i, &t, &q, &b);
+    EXPECT_EQ(t, kExpectedCounts[i - 1][0]);
+    EXPECT_EQ(q, kExpectedCounts[i - 1][1]);
+    EXPECT_EQ(b, kExpectedCounts[i - 1][2]);
+  }
+
+  ASSERT_DEBUG_DEATH(IntegerSequenceCodec::GetCountsForRange(0, &t, &q, &b), "");
+  ASSERT_DEBUG_DEATH(
+      IntegerSequenceCodec::GetCountsForRange(256, &t, &q, &b), "");
+
+  IntegerSequenceCodec::GetCountsForRange(1, &t, &q, &b);
+  EXPECT_EQ(t, 0);
+  EXPECT_EQ(q, 0);
+  EXPECT_EQ(b, 1);
+}
 
 // Test to make sure that we're calculating the number of bits needed to
 // encode a given number of values based on the range of the values.
