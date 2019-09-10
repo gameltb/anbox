@@ -1,2 +1,0 @@
-add_subdirectory(emugl)
-add_subdirectory(OpenglCodecCommon)
