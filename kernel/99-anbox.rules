@@ -1,0 +1,4 @@
+KERNEL=="ashmem", NAME="%k", MODE="0666"
+KERNEL=="binder", NAME="%k", MODE="0666"
+KERNEL=="hwbinder", NAME="%k", MODE="0666"
+KERNEL=="vndbinder", NAME="%k", MODE="0666"
