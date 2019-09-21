@@ -392,6 +392,7 @@ void LxcContainer::start(const Configuration &configuration) {
   auto devices = configuration.devices;
 
   // Additional devices we need in our container
+  // REF:https://chromium.googlesource.com/chromiumos/platform2/+/master/arc/container-bundle/#list-of-mounts-visible-in-the-container-mount-namespace
   devices.insert({"/dev/console", {0600}});
   devices.insert({"/dev/full", {0666}});
   devices.insert({"/dev/null", {0666}});
@@ -400,6 +401,11 @@ void LxcContainer::start(const Configuration &configuration) {
   devices.insert({"/dev/urandom", {0666}});
   devices.insert({"/dev/zero", {0666}});
   devices.insert({"/dev/tun", {0660, "/dev/net/tun"}});
+  devices.insert({"/dev/binder", {0666}});
+  devices.insert({"/dev/hwbinder", {0666}});
+  devices.insert({"/dev/vndbinder", {0666}});
+  devices.insert({"/dev/ashmem", {0666}});
+  devices.insert({"/dev/fuse", {0666}});
 
   // Remove all left over devices from last time first before
   // creating any new ones
