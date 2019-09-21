@@ -310,9 +310,11 @@ void LxcContainer::start(const Configuration &configuration) {
 
   // We can mount proc/sys as rw here as we will run the container unprivileged
   // in the end
-  set_config_item("lxc.mount.auto", "proc:mixed sys:mixed cgroup:mixed");
+  set_config_item("lxc.mount.auto", "proc:mixed sys:mixed cgroup:mixed:force");
 
+  // auto mount tmpfs on dev
   set_config_item("lxc.autodev", "1");
+
   set_config_item(lxc_config_pty_max_key, "1024");
   set_config_item(lxc_config_tty_max_key, "0");
   set_config_item(lxc_config_uts_name_key, "anbox");
