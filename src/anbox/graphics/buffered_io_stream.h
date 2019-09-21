@@ -18,7 +18,7 @@
 #ifndef ANBOX_GRAPHICS_BUFFERED_IO_STREAM_H_
 #define ANBOX_GRAPHICS_BUFFERED_IO_STREAM_H_
 
-#include "external/android-emugl/host/include/libOpenglRender/IOStream.h"
+#include "external/android/android-emugl/host/include/OpenglRender/IOStream.h"
 
 #include "anbox/graphics/buffer_queue.h"
 #include "anbox/network/socket_messenger.h"
@@ -39,9 +39,21 @@ class BufferedIOStream : public IOStream {
   virtual ~BufferedIOStream();
 
   void *allocBuffer(size_t min_size) override;
-  size_t commitBuffer(size_t size) override;
-  const unsigned char *read(void *buf, size_t *inout_len) override;
-  void forceStop() override;
+  int commitBuffer(size_t size) override;
+  const unsigned char *readRaw(void *buf, size_t *inout_len) override;
+
+  const unsigned char *readRaw_pub(void *buf, size_t *len) {
+    return readRaw(buf, len);
+  }
+
+  int writeFully(const void *buf, size_t len) override;
+  const unsigned char *readFully(void *buf, size_t len) override;
+  void *getDmaForReading(uint64_t guest_paddr) override;
+  void unlockDma(uint64_t guest_paddr) override;
+  void onSave(android::base::Stream *stream) override;
+  unsigned char *onLoad(android::base::Stream *stream) override;
+
+  void forceStop();
   void post_data(Buffer &&data);
 
   bool needs_data();

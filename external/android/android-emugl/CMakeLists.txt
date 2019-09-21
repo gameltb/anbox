@@ -1,5 +1,5 @@
 set(ANDROID_EMUGL_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(GOLDFISH_EMUGL_DIR ${ANDROID_QEMU2_TOP_DIR}/../../device/generic/goldfish-opengl/)
+set(GOLDFISH_EMUGL_DIR ../../../android/opengl/)
 
 # We start of defining an interface library that defines all the compiler settings we wish to use for all libs. please
 # keep this at a bare minimum!
@@ -41,9 +41,11 @@ function(generate_emugen_lib LIBNAME LOCATION NAME SOURCES)
                                     host/include/
                                     host/libs/libGLSnapshot
                                     shared/OpenglCodecCommon
+                                    shared
+                                    ../android-emu
                                     ${CMAKE_CURRENT_BINARY_DIR})
   target_compile_options(${LIBNAME} PRIVATE -fvisibility=hidden)
-  target_link_libraries(${LIBNAME} PUBLIC android-emu GLSnapshot)
+  target_link_libraries(${LIBNAME} PUBLIC GLSnapshot)
   target_link_libraries(${LIBNAME} PRIVATE emugl_base)
 endfunction()
 
@@ -52,20 +54,20 @@ generate_emugen_lib(GLESv1_dec host/libs/GLESv1_dec gles1 host/libs/GLESv1_dec/G
 generate_emugen_lib(GLESv2_dec host/libs/GLESv2_dec gles2 host/libs/GLESv2_dec/GLESv2Decoder.cpp)
 generate_emugen_lib(renderControl_dec host/libs/renderControl_dec renderControl "")
 
-add_subdirectory(host/libs/Translator/EGL)
-add_subdirectory(host/libs/Translator/GLES_CM)
-add_subdirectory(host/libs/Translator/GLES_V2)
-add_subdirectory(host/libs/Translator/GLcommon)
-add_subdirectory(host/libs/libGLES12Translator)
+#add_subdirectory(host/libs/Translator/EGL)
+#add_subdirectory(host/libs/Translator/GLES_CM)
+#add_subdirectory(host/libs/Translator/GLES_V2)
+#add_subdirectory(host/libs/Translator/GLcommon)
+#add_subdirectory(host/libs/libGLES12Translator)
 add_subdirectory(host/libs/libGLSnapshot)
 add_subdirectory(host/libs/libOpenGLESDispatch)
-add_subdirectory(host/libs/libOpenglRender)
-add_subdirectory(host/libs/libOpenglRender/vulkan/cereal)
+#add_subdirectory(host/libs/libOpenglRender)
+#add_subdirectory(host/libs/libOpenglRender/vulkan/cereal)
 add_subdirectory(shared/OpenglCodecCommon)
 add_subdirectory(shared/emugl/common)
 
-if(NOT WINDOWS)
-  add_subdirectory(guest)
-  add_subdirectory(${ANDROID_QEMU2_TOP_DIR}/../../device/generic/goldfish-opengl goldfish-opengl)
-  add_subdirectory(combined)
-endif()
+#if(NOT WINDOWS)
+#  add_subdirectory(guest)
+#  add_subdirectory(${ANDROID_QEMU2_TOP_DIR}/../../device/generic/goldfish-opengl goldfish-opengl)
+#  add_subdirectory(combined)
+#endif()

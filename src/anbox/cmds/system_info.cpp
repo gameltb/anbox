@@ -163,7 +163,7 @@ class SystemInformation {
 
   void collect_graphics_info() {
     auto gl_libs = anbox::graphics::emugl::default_gl_libraries();
-    if (!anbox::graphics::emugl::initialize(gl_libs, nullptr, nullptr)) {
+    if (!anbox::graphics::emugl::initialize(gl_libs)) {
       return;
     }
 

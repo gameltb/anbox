@@ -42,7 +42,7 @@ void *BufferedIOStream::allocBuffer(size_t min_size) {
   return write_buffer_.data();
 }
 
-size_t BufferedIOStream::commitBuffer(size_t size) {
+int BufferedIOStream::commitBuffer(size_t size) {
   std::unique_lock<std::mutex> l(out_lock_);
   assert(size <= write_buffer_.size());
   if (write_buffer_.isAllocated()) {
@@ -55,7 +55,7 @@ size_t BufferedIOStream::commitBuffer(size_t size) {
   return size;
 }
 
-const unsigned char *BufferedIOStream::read(void *buf, size_t *inout_len) {
+const unsigned char *BufferedIOStream::readRaw(void *buf, size_t *inout_len) {
   std::unique_lock<std::mutex> l(lock_);
   size_t wanted = *inout_len;
   size_t count = 0U;
@@ -133,5 +133,15 @@ void BufferedIOStream::thread_main() {
     }
   }
 }
+
+int BufferedIOStream::writeFully(const void *buf, size_t len) {}
+const unsigned char *BufferedIOStream::readFully(void *buf, size_t len) {
+  return readRaw(buf,&len);
+}
+void *BufferedIOStream::getDmaForReading(uint64_t guest_paddr) {}
+void BufferedIOStream::unlockDma(uint64_t guest_paddr) {}
+void BufferedIOStream::onSave(android::base::Stream *stream) {}
+unsigned char *BufferedIOStream::onLoad(android::base::Stream *stream) {}
+
 }  // namespace graphics
 }  // namespace anbox

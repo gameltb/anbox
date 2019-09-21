@@ -16,7 +16,7 @@
 #ifndef _READ_BUFFER_H
 #define _READ_BUFFER_H
 
-#include "external/android-emugl/host/include/libOpenglRender/IOStream.h"
+#include "external/android/android-emugl/host/include/OpenglRender/IOStream.h"
 
 class ReadBuffer {
  public:

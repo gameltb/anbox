@@ -21,7 +21,7 @@
 #include "anbox/graphics/gl_extensions.h"
 #include "anbox/logger.h"
 
-#include "external/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
 
 // Generated with emugl at build time
 #include "gles2_dec.h"

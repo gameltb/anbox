@@ -23,8 +23,8 @@
 #include "anbox/graphics/layer_composer.h"
 #include "anbox/logger.h"
 
-#include "external/android-emugl/shared/OpenglCodecCommon/ChecksumCalculatorThreadInfo.h"
-#include "external/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
+#include "external/android/android-emugl/shared/OpenglCodecCommon/ChecksumCalculatorThreadInfo.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
 
 #include <map>
 #include <string>
@@ -364,7 +364,7 @@ static int rcDestroyClientImage(uint32_t image) {
   return renderer->destroyClientImage(image);
 }
 
-static void rcSelectChecksumCalculator(uint32_t protocol, uint32_t) {
+static void rcSelectChecksumHelper(uint32_t protocol, uint32_t) {
   ChecksumCalculatorThreadInfo::setVersion(protocol);
 }
 
@@ -463,7 +463,7 @@ void initRenderControlContext(renderControl_decoder_context_t *dec) {
   dec->rcOpenColorBuffer2 = rcOpenColorBuffer2;
   dec->rcCreateClientImage = rcCreateClientImage;
   dec->rcDestroyClientImage = rcDestroyClientImage;
-  dec->rcSelectChecksumCalculator = rcSelectChecksumCalculator;
+  dec->rcSelectChecksumHelper = rcSelectChecksumHelper;
   dec->rcGetNumDisplays = rcGetNumDisplays;
   dec->rcGetDisplayWidth = rcGetDisplayWidth;
   dec->rcGetDisplayHeight = rcGetDisplayHeight;

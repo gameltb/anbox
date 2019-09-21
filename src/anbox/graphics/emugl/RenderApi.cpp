@@ -17,11 +17,11 @@
 #include "anbox/graphics/emugl/RenderApi.h"
 #include "anbox/graphics/emugl/DispatchTables.h"
 
-#include "external/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
-#include "external/android-emugl/host/include/OpenGLESDispatch/GLESv1Dispatch.h"
-#include "external/android-emugl/host/include/OpenGLESDispatch/GLESv2Dispatch.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/GLESv1Dispatch.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/GLESv2Dispatch.h"
 
-#include "external/android-emugl/shared/emugl/common/crash_reporter.h"
+#include "external/android/android-emugl/shared/emugl/common/crash_reporter.h"
 
 #include <string.h>
 
@@ -43,12 +43,7 @@ std::vector<GLLibrary> default_gl_libraries() {
   };
 }
 
-bool initialize(const std::vector<GLLibrary> &libs, emugl_logger_struct *log_funcs, logger_t crash_func) {
-  set_emugl_crash_reporter(crash_func);
-  if (log_funcs) {
-    set_emugl_logger(log_funcs->coarse);
-    set_emugl_cxt_logger(log_funcs->fine);
-  }
+bool initialize(const std::vector<GLLibrary> &libs) {
 
   for (const auto &lib : libs) {
     const auto path = lib.path.c_str();
@@ -69,17 +64,6 @@ bool initialize(const std::vector<GLLibrary> &libs, emugl_logger_struct *log_fun
       break;
     }
   }
-
-  // If we are not provided with a link to a OpenGL ES v1 implementation
-  // we assign dummy functions to all of the functions we would call.
-  // This allows us to still manage the major chunk of Android applications
-  // which are all >= GLESv2 until we have a proper GLESv1->GLESv2
-  // translation mechanism in place.
-  if (!s_gles1.initialized)
-    gles1_dispatch_init(nullptr, &s_gles1);
-
-  if (!s_egl.initialized || !s_gles2.initialized)
-    return false;
 
   return true;
 }

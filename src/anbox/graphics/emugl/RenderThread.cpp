@@ -22,10 +22,10 @@
 #include "anbox/graphics/emugl/TimeUtils.h"
 #include "anbox/logger.h"
 
-#include "external/android-emugl/shared/OpenglCodecCommon/ChecksumCalculatorThreadInfo.h"
-#include "external/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
-#include "external/android-emugl/host/include/OpenGLESDispatch/GLESv1Dispatch.h"
-#include "external/android-emugl/host/include/OpenGLESDispatch/GLESv2Dispatch.h"
+#include "external/android/android-emugl/shared/OpenglCodecCommon/ChecksumCalculatorThreadInfo.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/GLESv1Dispatch.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/GLESv2Dispatch.h"
 
 #define STREAM_BUFFER_SIZE 4 * 1024 * 1024
 
@@ -40,11 +40,14 @@ RenderThread *RenderThread::create(const std::shared_ptr<Renderer> &renderer, IO
   return new RenderThread(renderer, stream, m);
 }
 
-void RenderThread::forceStop() { m_stream->forceStop(); }
+void RenderThread::forceStop() { 
+  //m_stream->forceStop();
+}
 
 intptr_t RenderThread::main() {
   RenderThreadInfo threadInfo;
-  ChecksumCalculatorThreadInfo threadChecksumInfo;
+  ChecksumCalculatorThreadInfo tChecksumInfo;
+  ChecksumCalculator &checksumCalc = tChecksumInfo.get();
 
   threadInfo.m_glDec.initGL(gles1_dispatch_get_proc_func, NULL);
   threadInfo.m_gl2Dec.initGL(gles2_dispatch_get_proc_func, NULL);
@@ -64,20 +67,20 @@ intptr_t RenderThread::main() {
       std::unique_lock<std::mutex> l(m_lock);
 
       size_t last =
-          threadInfo.m_glDec.decode(readBuf.buf(), readBuf.validData(), m_stream);
+          threadInfo.m_glDec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
       if (last > 0) {
         progress = true;
         readBuf.consume(last);
       }
 
       last =
-          threadInfo.m_gl2Dec.decode(readBuf.buf(), readBuf.validData(), m_stream);
+          threadInfo.m_gl2Dec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
       if (last > 0) {
         progress = true;
         readBuf.consume(last);
       }
 
-      last = threadInfo.m_rcDec.decode(readBuf.buf(), readBuf.validData(), m_stream);
+      last = threadInfo.m_rcDec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
       if (last > 0) {
         readBuf.consume(last);
         progress = true;
@@ -87,8 +90,8 @@ intptr_t RenderThread::main() {
 
   }
 
-  threadInfo.m_gl2Dec.freeShader();
-  threadInfo.m_gl2Dec.freeProgram();
+  //threadInfo.m_gl2Dec.freeShader();
+  //threadInfo.m_gl2Dec.freeProgram();
 
   // Release references to the current thread's context/surfaces if any
   renderer_->bindContext(0, 0, 0);

@@ -366,8 +366,8 @@ function(android_add_executable name)
   if (WINDOWS_MSVC_X86_64)
     target_link_libraries(${name} PRIVATE msvc-posix-compat)
   endif()
-  android_target_dependency(${name} all RUNTIME_OS_DEPENDENCIES)
-  android_target_properties(${name} all "${RUNTIME_OS_PROPERTIES}")
+  #android_target_dependency(${name} all RUNTIME_OS_DEPENDENCIES)
+  #android_target_properties(${name} all "${RUNTIME_OS_PROPERTIES}")
 
   if(ANDROID_CODE_COVERAGE)
     # TODO Clean out existing .gcda files.
@@ -427,7 +427,7 @@ endfunction()
 # This file will be placed on the current binary dir, so it can be included if this directory is on the include path.
 function(android_generate_hw_config)
   add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/android/avd/hw-config-defs.h
-                     COMMAND python ${ANDROID_QEMU2_TOP_DIR}/android/scripts/gen-hw-config.py
+                     COMMAND python2 ${ANDROID_QEMU2_TOP_DIR}/android/scripts/gen-hw-config.py
                              ${ANDROID_QEMU2_TOP_DIR}/android/android-emu/android/avd/hardware-properties.ini
                              ${CMAKE_CURRENT_BINARY_DIR}/android/avd/hw-config-defs.h
                      VERBATIM)

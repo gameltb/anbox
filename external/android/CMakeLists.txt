@@ -1,18 +1,15 @@
-if (WINDOWS_MSVC_X86_64)
-  add_subdirectory(msvc-posix-compat)
-endif()
-add_subdirectory(third_party)
+#
+# Allow the use of IN_LIST operand
+cmake_policy(SET CMP0057 NEW)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/build/cmake/")
+include(toolchain)
+_get_host_tag(TAG)
+toolchain_configure_tags(${TAG})
+
+include(android)
+
+set(ANDROID_QEMU2_TOP_DIR ${CMAKE_CURRENT_LIST_DIR}/../)
+
 add_subdirectory(android-emu)
 add_subdirectory(android-emugl)
-add_subdirectory(emulator)
-add_subdirectory(emulator-check)
-add_subdirectory(tests)
-if (GRPC)
-  message(STATUS "Including grpc support")
-  add_subdirectory(android-grpc)
-
-  if (WEBRTC)
-    message(STATUS "Including webrtc support")
-    add_subdirectory(android-webrtc)
-  endif()
-endif()

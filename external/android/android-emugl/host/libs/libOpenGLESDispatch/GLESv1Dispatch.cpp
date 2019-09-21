@@ -114,11 +114,21 @@ LIST_GLES12_TR_FUNCTIONS(DEFINE_DUMMY_FUNCTION);
         dispatch_table-> function_name = gles1_dummy_##function_name; \
         } while(0);
 
-bool gles1_dispatch_init(GLESv1Dispatch* dispatch_table) {
+bool gles1_dispatch_init(const char *path, GLESv1Dispatch* dispatch_table) {
+    if (!dispatch_table)
+        return false;
 
+    // If no path is given we assign dummy functions to all GL calls
+    // we would have loaded from a real implementation.
+    if (!path) {
+        LIST_GLES1_FUNCTIONS(ASSIGN_DUMMY, ASSIGN_DUMMY);
+        return true;
+    }
+    
     dispatch_table->underlying_gles2_api = NULL;
 
-    const char* libName = getenv("ANDROID_GLESv1_LIB");
+    const char *libName = path;
+    if (!libName) libName = getenv("ANDROID_GLESv1_LIB");
     if (!libName) {
         libName = DEFAULT_GLES_CM_LIB;
     }

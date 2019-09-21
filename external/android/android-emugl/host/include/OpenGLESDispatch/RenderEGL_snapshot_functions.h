@@ -4,6 +4,8 @@
 #ifndef RENDER_EGL_SNAPSHOT_FUNCTIONS_H
 #define RENDER_EGL_SNAPSHOT_FUNCTIONS_H
 
+typedef void* EGLStream;
+
 #define LIST_RENDER_EGL_SNAPSHOT_FUNCTIONS(X) \
   X(EGLConfig, eglLoadConfig, (EGLDisplay display, EGLStream stream)) \
   X(EGLContext, eglLoadContext, (EGLDisplay display, const EGLint * attrib_list, EGLStream stream)) \

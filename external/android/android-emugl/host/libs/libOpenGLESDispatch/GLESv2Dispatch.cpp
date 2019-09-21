@@ -39,9 +39,10 @@ void gles2_unimplemented() {
 // This function is called only once during initialiation before
 // any thread has been created - hence it should NOT be thread safe.
 //
-bool gles2_dispatch_init(GLESv2Dispatch* dispatch_table)
+bool gles2_dispatch_init(const char *path, GLESv2Dispatch* dispatch_table)
 {
-    const char *libName = getenv("ANDROID_GLESv2_LIB");
+    const char *libName = path;
+    if (!libName) libName = getenv("ANDROID_GLESv2_LIB");
     if (!libName) {
         libName = DEFAULT_GLES_V2_LIB;
     }

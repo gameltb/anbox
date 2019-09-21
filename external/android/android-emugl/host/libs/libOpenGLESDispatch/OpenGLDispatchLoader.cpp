@@ -44,7 +44,7 @@ const GLESv1Dispatch* LazyLoadedGLESv1Dispatch::get() {
 
 LazyLoadedGLESv1Dispatch::LazyLoadedGLESv1Dispatch() {
     LazyLoadedEGLDispatch::get();
-    mValid = gles1_dispatch_init(&s_gles1);
+    mValid = gles1_dispatch_init(nullptr, &s_gles1);
 }
 
 // static
@@ -59,7 +59,7 @@ const GLESv2Dispatch* LazyLoadedGLESv2Dispatch::get() {
 
 LazyLoadedGLESv2Dispatch::LazyLoadedGLESv2Dispatch() {
     LazyLoadedEGLDispatch::get();
-    mValid = gles2_dispatch_init(&s_gles2);
+    mValid = gles2_dispatch_init(nullptr,&s_gles2);
 }
 
 // static
@@ -72,4 +72,4 @@ const EGLDispatch* LazyLoadedEGLDispatch::get() {
     }
 }
 
-LazyLoadedEGLDispatch::LazyLoadedEGLDispatch() { mValid = init_egl_dispatch(); }
+LazyLoadedEGLDispatch::LazyLoadedEGLDispatch() { mValid = init_egl_dispatch(nullptr); }

@@ -20,8 +20,8 @@
 #include "anbox/graphics/emugl/RenderContext.h"
 #include "anbox/graphics/emugl/WindowSurface.h"
 
-#include "external/android-emugl/host/libs/GLESv1_dec/GLESv1Decoder.h"
-#include "external/android-emugl/host/libs/GLESv2_dec/GLESv2Decoder.h"
+#include "external/android/android-emugl/host/libs/GLESv1_dec/GLESv1Decoder.h"
+#include "external/android/android-emugl/host/libs/GLESv2_dec/GLESv2Decoder.h"
 
 // Generated with emugl at build time
 #include "renderControl_dec.h"

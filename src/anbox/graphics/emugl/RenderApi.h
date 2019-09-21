@@ -21,12 +21,7 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include "external/android-emugl/shared/emugl/common/logging.h"
-
-typedef struct {
-  logger_t coarse;
-  logger_t fine;
-} emugl_logger_struct;
+#include "external/android/android-emugl/shared/emugl/common/logging.h"
 
 namespace anbox {
 namespace graphics {
@@ -39,7 +34,7 @@ struct GLLibrary {
 
 std::vector<GLLibrary> default_gl_libraries();
 
-bool initialize(const std::vector<GLLibrary> &libs, emugl_logger_struct *log_funcs, logger_t crash_func);
+bool initialize(const std::vector<GLLibrary> &libs);
 }  // namespace emugl
 }  // namespace graphics
 }  // namespace anbox

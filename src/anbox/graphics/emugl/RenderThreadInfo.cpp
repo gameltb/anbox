@@ -18,8 +18,8 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-align"
-#include "external/android-emugl/shared/emugl/common/lazy_instance.h"
-#include "external/android-emugl/shared/emugl/common/thread_store.h"
+#include "external/android/android-emugl/shared/emugl/common/lazy_instance.h"
+#include "external/android/android-emugl/shared/emugl/common/thread_store.h"
 #pragma GCC diagnostic pop
 
 namespace {

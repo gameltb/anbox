@@ -55,7 +55,7 @@ int ReadBuffer::getData(IOStream* stream) {
     len = m_size - m_validData;
   }
   m_readPtr = m_buf;
-  if (NULL != stream->read(m_buf + m_validData, &len)) {
+  if (NULL != stream->readRaw_pub(m_buf + m_validData, &len)) {
     m_validData += len;
     return len;
   }

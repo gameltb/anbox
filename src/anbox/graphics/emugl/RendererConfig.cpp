@@ -15,7 +15,7 @@
 #include "anbox/graphics/emugl/RendererConfig.h"
 #include "anbox/logger.h"
 
-#include "external/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
+#include "external/android/android-emugl/host/include/OpenGLESDispatch/EGLDispatch.h"
 
 #include <stdio.h>
 #include <string.h>

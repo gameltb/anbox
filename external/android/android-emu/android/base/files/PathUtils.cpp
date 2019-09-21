@@ -19,6 +19,9 @@
 #include <assert.h>
 #include <string.h>
 
+#include <sys/stat.h>
+#include <dirent.h>
+
 namespace android {
 namespace base {
 
@@ -345,8 +348,27 @@ std::string PathUtils::relativeTo(StringView base, StringView path, HostType hos
 }
 
 // static
+bool pathIsDirInternal(StringView path) {
+    if (path.empty()) return false;
+
+    struct dirent* file;
+    DIR* dir = opendir(path.str().c_str());
+    struct stat st;
+    bool ret = false;
+
+    if ((file = readdir(dir)) != NULL) {
+        if (stat(file->d_name, &st) != -1) {
+            ret = S_ISDIR(st.st_mode);
+        }
+    }
+    closedir(dir);
+
+    return ret;
+}
+
+// static
 Optional<std::string> PathUtils::pathWithoutDirs(StringView name) {
-    if (System::get()->pathIsDir(name)) return kNullopt;
+    if (pathIsDirInternal(name)) return kNullopt;
 
     auto components = PathUtils::decompose(name);
 
@@ -356,7 +378,7 @@ Optional<std::string> PathUtils::pathWithoutDirs(StringView name) {
 }
 
 Optional<std::string> PathUtils::pathToDir(StringView name) {
-    if (System::get()->pathIsDir(name)) return name.str();
+    if (pathIsDirInternal(name)) return name.str();
 
     auto components = PathUtils::decompose(name);
 
