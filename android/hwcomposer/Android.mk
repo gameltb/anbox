@@ -27,6 +27,8 @@ emulator_hwcomposer_shared_libraries := \
     libhardware \
     libsync \
     libui \
+    lib_renderControl_enc \
+    libOpenglSystemCommon
 
 emulator_hwcomposer_src_files := \
     hwcomposer.cpp
@@ -36,7 +38,11 @@ emulator_hwcomposer_cflags += \
 
 emulator_hwcomposer_c_includes += \
     system/core/libsync \
-    system/core/libsync/include
+    system/core/libsync/include \
+    $(LOCAL_PATH)/../opengl/host/include/libOpenglRender \
+    $(LOCAL_PATH)/../opengl/shared/OpenglCodecCommon \
+    $(LOCAL_PATH)/../opengl/system/renderControl_enc \
+    $(LOCAL_PATH)/../opengl/system/OpenglSystemCommon
 
 emulator_hwcomposer_relative_path := hw
 
@@ -47,7 +53,7 @@ LOCAL_CFLAGS := $(emulator_hwcomposer_cflags)
 LOCAL_C_INCLUDES := $(emulator_hwcomposer_c_includes)
 LOCAL_MODULE_RELATIVE_PATH := $(emulator_hwcomposer_relative_path)
 
-LOCAL_MODULE := hwcomposer.goldfish
+LOCAL_MODULE := hwcomposer.anbox
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)

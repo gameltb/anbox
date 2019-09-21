@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ifneq ($(filter generic_x86 generic_x86_64 generic generic_arm64 generic_mips generic_mips64, $(TARGET_DEVICE)),)
+ifneq ($(filter anbox_x86_64, $(TARGET_DEVICE)),)
 
 LOCAL_PATH := $(call my-dir)
 
@@ -100,7 +100,7 @@ LOCAL_MODULE := camera.$(TARGET_BOARD_PLATFORM)
 else ifeq ($(TARGET_PRODUCT),vbox_x86)
 LOCAL_MODULE := camera.vbox_x86
 else
-LOCAL_MODULE := camera.goldfish
+LOCAL_MODULE := camera.anbox
 endif
 
 include $(BUILD_SHARED_LIBRARY)

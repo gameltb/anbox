@@ -26,7 +26,7 @@ LOCAL_SHARED_LIBRARIES := liblog libcutils
 LOCAL_HEADER_LIBRARIES := libutils_headers libhardware_headers
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../include
 LOCAL_SRC_FILES := power_qemu.c
-LOCAL_MODULE := power.goldfish
+LOCAL_MODULE := power.anbox
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_SHARED_LIBRARY)
 

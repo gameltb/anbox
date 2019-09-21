@@ -1,4 +1,4 @@
-ifneq (false,$(BUILD_EMULATOR_OPENGL_DRIVER))
+ifneq (false,$(BUILD_ANBOX_EMULATOR_OPENGL_DRIVER))
 
 LOCAL_PATH := $(call my-dir)
 
@@ -58,4 +58,4 @@ endif
 include $(BUILD_PREBUILT)
 endif # TARGET_PRODUCT in 'full full_x86 full_mips sdk sdk_x86 sdk_mips google_sdk google_sdk_x86 google_sdk_mips')
 
-endif # BUILD_EMULATOR_OPENGL_DRIVER != false
+endif # BUILD_ANBOX_EMULATOR_OPENGL_DRIVER != false

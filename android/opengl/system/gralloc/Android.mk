@@ -1,4 +1,4 @@
-ifneq (false,$(BUILD_EMULATOR_OPENGL_DRIVER))
+ifneq (false,$(BUILD_ANBOX_EMULATOR_OPENGL_DRIVER))
 
 LOCAL_PATH := $(call my-dir)
 
@@ -21,10 +21,10 @@ endif
 $$(call emugl-end-module)
 endef  # define gralloc_recipe
 
-$(eval $(call gralloc_recipe,goldfish))
+$(eval $(call gralloc_recipe,anbox))
 $(eval $(call gralloc_recipe,ranchu))
 ifeq ($(TARGET_BOARD_PLATFORM),brilloemulator)
 $(eval $(call gralloc_recipe,$(TARGET_BOARD_PLATFORM)))
 endif  # defined(BRILLO)
 
-endif # BUILD_EMULATOR_OPENGL_DRIVER != false
+endif # BUILD_ANBOX_EMULATOR_OPENGL_DRIVER != false

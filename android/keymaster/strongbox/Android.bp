@@ -15,11 +15,11 @@
 //
 
 cc_binary {
-    name: "android.hardware.keymaster@4.0-strongbox-service",
+    name: "android.hardware.keymaster@4.0-strongbox-service-anbox",
     defaults: ["hidl_defaults"],
     relative_install_path: "hw",
     vendor: true,
-    init_rc: ["android.hardware.keymaster@4.0-strongbox-service.rc"],
+    init_rc: ["android.hardware.keymaster@4.0-strongbox-service-anbox.rc"],
     srcs: ["service.cpp"],
 
     shared_libs: [

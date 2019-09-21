@@ -49,7 +49,7 @@ $(call emugl-end-module)
 # version of this file to point to the appropriate HW EGL libraries.
 #
 ifneq (,$(filter full full_x86 full_mips sdk sdk_x86 sdk_mips,$(TARGET_PRODUCT)))
-ifeq (,$(BUILD_EMULATOR_OPENGL_DRIVER))
+ifeq (,$(BUILD_ANBOX_EMULATOR_OPENGL_DRIVER))
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := egl.cfg
@@ -59,7 +59,7 @@ LOCAL_MODULE_PATH := $(TARGET_OUT)/lib/egl
 LOCAL_MODULE_CLASS := ETC
 
 include $(BUILD_PREBUILT)
-endif # building 'real' driver BUILD_EMULATOR_OPENGL_DRIVER
+endif # building 'real' driver BUILD_ANBOX_EMULATOR_OPENGL_DRIVER
 endif # TARGET_PRODUCT in 'full sdk full_x86 sdk_x86 full_mips sdk_mips'
 
 #### gles_emul.cfg ####

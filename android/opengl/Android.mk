@@ -1,17 +1,17 @@
 # This is the top-level build file for the Android HW OpenGL ES emulation
 # in Android.
 #
-# You must define BUILD_EMULATOR_OPENGL to 'true' in your environment to
+# You must define BUILD_ANBOX_EMULATOR_OPENGL to 'true' in your environment to
 # build the following files.
 #
-# Also define BUILD_EMULATOR_OPENGL_DRIVER to 'true' to build the gralloc
+# Also define BUILD_ANBOX_EMULATOR_OPENGL_DRIVER to 'true' to build the gralloc
 # stuff as well.
 #
 # Top-level for all modules
 GOLDFISH_OPENGL_PATH := $(call my-dir)
 
 # There are two kinds of builds for goldfish-opengl:
-# 1. The standard guest build, denoted by BUILD_EMULATOR_OPENGL
+# 1. The standard guest build, denoted by BUILD_ANBOX_EMULATOR_OPENGL
 # 2. The host-side build, denoted by GOLDFISH_OPENGL_BUILD_FOR_HOST
 #
 # Variable controlling whether the build for goldfish-opengl
@@ -67,7 +67,7 @@ EMUGL_COMMON_CFLAGS += \
 
 endif # GOLDFISH_OPENGL_BUILD_FOR_HOST
 
-ifeq (true,$(BUILD_EMULATOR_OPENGL)) # Guest build
+ifeq (true,$(BUILD_ANBOX_EMULATOR_OPENGL)) # Guest build
 
 GOLDFISH_OPENGL_SHOULD_BUILD := true
 
@@ -109,7 +109,7 @@ endif
 #
 include $(GOLDFISH_OPENGL_PATH)/common.mk
 
-endif # BUILD_EMULATOR_OPENGL (guest build)
+endif # BUILD_ANBOX_EMULATOR_OPENGL (guest build)
 
 ifeq (true,$(GOLDFISH_OPENGL_SHOULD_BUILD))
 
