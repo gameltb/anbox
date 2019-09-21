@@ -343,12 +343,15 @@ void LxcContainer::start(const Configuration &configuration) {
 
   set_config_item(lxc_config_log_level_key, "0");
   const auto log_path = SystemConfiguration::instance().log_dir();
-  set_config_item(lxc_config_log_file_key, utils::string_format("%s/container.log", log_path).c_str());
+  set_config_item(lxc_config_log_file_key, utils::string_format("%s/container.log", log_path));
+  system(utils::string_format("truncate -s 0  %s/container.log", log_path).c_str());
+  system(utils::string_format("truncate -s 0 %s/system.log", SystemConfiguration::instance().data_dir() / "data").c_str());
 
 #ifndef ENABLE_LXC2_SUPPORT
-    // Dump the console output to disk to have a chance to debug early boot problems
-    set_config_item("lxc.console.logfile", utils::string_format("%s/console.log", log_path).c_str());
-    set_config_item("lxc.console.rotate", "1");
+  // Dump the console output to disk to have a chance to debug early boot problems
+  set_config_item("lxc.console.rotate", "1");
+  set_config_item("lxc.console.logfile", utils::string_format("%s/console.log", log_path));
+  system(utils::string_format("truncate -s 0 %s/console.log", log_path).c_str());
 #endif
 
 
