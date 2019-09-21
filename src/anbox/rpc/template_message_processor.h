@@ -57,7 +57,11 @@ void invoke(Self* self, Bridge* rpc,
 
   try {
     std::unique_ptr<google::protobuf::Closure> callback(
+#if GOOGLE_PROTOBUF_VERSION == 3000000
+        google::protobuf::internal::NewPermanentCallback<
+#else
         google::protobuf::NewPermanentCallback<
+#endif
             Self, ::google::protobuf::uint32,
             typename result_ptr_t<ResultMessage>::type>(
             self, &Self::send_response, invocation.id(), &result_message));
