@@ -1,0 +1,19 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-anbox",
+            "type": "shell",
+            "command": "export CC=/usr/bin/clang ; export CXX=/usr/bin/clang++ ;if [ ! -e ${workspaceRoot}/build ] ; then mkdir ${workspaceRoot}/build ; fi ; cd ${workspaceRoot}/build ; cmake .. -DCMAKE_INSTALL_LIBDIR=/usr/lib -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_CXX_FLAGS=\"-Wno-error=implicit-fallthrough -Wno-error=missing-field-initializers\" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON; make -j4 anbox",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

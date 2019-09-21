@@ -16,6 +16,7 @@ CMakeLists.txt.user
 modules.order
 .tmp_versions
 .idea
+/.vscode/settings.json
 
 external/android-emugl-anbox
 external/android-emugl-emu-2.0-release
