@@ -228,9 +228,8 @@ anbox::cmds::SessionManager::SessionManager()
               auto rpc_channel =
                   std::make_shared<rpc::Channel>(pending_calls, sender);
               // This is safe as long as we only support a single client. If we
-              // support
-              // more than one one day we need proper dispatching to the right
-              // one.
+              // support more than one one day we need proper dispatching to the
+              // right one.
               android_api_stub->set_rpc_channel(rpc_channel);
 
               auto server = std::make_shared<bridge::PlatformApiSkeleton>(
@@ -249,6 +248,10 @@ anbox::cmds::SessionManager::SessionManager()
                   sender, server, pending_calls);
             }));
 
+    if(!fs::exists(SystemConfiguration::instance().kmsg_fifo_path()))
+      mkfifo(SystemConfiguration::instance().kmsg_fifo_path().c_str(),0777);
+
+    // Only add device for android connect to the outside manager.
     container::Configuration container_configuration;
     if (!standalone_) {
       container_configuration.bind_mounts = {
@@ -256,6 +259,7 @@ anbox::cmds::SessionManager::SessionManager()
         {bridge_connector->socket_file(), "/dev/anbox_bridge"},
         {audio_server->socket_file(), "/dev/anbox_audio"},
         {SystemConfiguration::instance().input_device_dir(), "/dev/input"},
+        {SystemConfiguration::instance().kmsg_fifo_path(), "/dev/kmsg"},
       };
 
       dispatcher->dispatch([&]() {

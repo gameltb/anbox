@@ -43,6 +43,7 @@ class SystemConfiguration {
   std::string container_socket_path() const;
   std::string container_devices_dir() const;
   std::string input_device_dir() const;
+  std::string kmsg_fifo_path() const;
   std::string application_item_dir() const;
   std::string resource_dir() const;
 

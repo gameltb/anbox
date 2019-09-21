@@ -101,6 +101,11 @@ std::string anbox::SystemConfiguration::input_device_dir() const {
   return dir;
 }
 
+std::string anbox::SystemConfiguration::kmsg_fifo_path() const {
+  static std::string dir = anbox::utils::string_format("%s/anbox/android.kmsg.fifo", runtime_dir());
+  return dir;
+}
+
 std::string anbox::SystemConfiguration::application_item_dir() const {
   static auto dir = xdg::data().home() / "applications" / "anbox";
   if (anbox::utils::get_env_value("ANBOX_NO_DESKTOP_SUBDIR").length() > 0)
