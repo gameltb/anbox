@@ -34,6 +34,7 @@ class SystemConfiguration {
 
   boost::filesystem::path data_dir() const;
   std::string rootfs_dir() const;
+  std::string uid0_rootfs_dir() const;
   std::string overlay_dir() const;
   std::string combined_rootfs_dir() const;
   std::string log_dir() const;

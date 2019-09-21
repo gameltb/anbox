@@ -125,6 +125,7 @@ anbox::cmds::ContainerManager::ContainerManager()
 anbox::cmds::ContainerManager::~ContainerManager() {}
 
 bool anbox::cmds::ContainerManager::setup_mounts() {
+  // mount data cache and system image here
   fs::path android_img_path = android_img_path_;
   if (android_img_path.empty())
     android_img_path = SystemConfiguration::instance().data_dir() / "android.img";
@@ -142,6 +143,10 @@ bool anbox::cmds::ContainerManager::setup_mounts() {
 
   if (!fs::exists(android_rootfs_dir))
     fs::create_directory(android_rootfs_dir);
+
+  const auto android_uid0_rootfs_dir = SystemConfiguration::instance().uid0_rootfs_dir();
+  if (!fs::exists(android_uid0_rootfs_dir))
+    fs::create_directory(android_uid0_rootfs_dir);
 
   // We prefer using the kernel for mounting the squashfs image but
   // for some cases (unprivileged containers) where no loop support
@@ -165,42 +170,44 @@ bool anbox::cmds::ContainerManager::setup_mounts() {
       return false;
     }
 
-    auto m = common::MountEntry::create(loop_device, android_rootfs_dir, "squashfs", MS_MGC_VAL | MS_RDONLY | MS_PRIVATE);
+    auto m = common::MountEntry::create(loop_device, android_uid0_rootfs_dir, "ext4", MS_MGC_VAL | MS_RDONLY | MS_PRIVATE);
     if (!m) {
       ERROR("Failed to mount Android rootfs");
       return false;
     }
     mounts_.push_back(m);
-  } else if (fs::exists("/dev/fuse") && !utils::find_program_on_path("squashfuse").empty()) {
+  } else {
+    ERROR("No loop device support found. Can't setup Android rootfs!");
+    return false;
+  }
+
+  // Use bindfs for uidshift
+  if (!utils::find_program_on_path("bindfs").empty()) {
     std::vector<std::string> args = {
-      "-t", "fuse.squashfuse",
-      // Allow other users than root to access the rootfs
-      "-o", "allow_other",
-      android_img_path.string(),
-      android_rootfs_dir,
+        "-t", "fuse.bindfs",
+        "-o", "--uid-offset=100000",
+        "-o", "--gid-offset=100000",
+        "-o", "ro",
+        android_uid0_rootfs_dir,
+        android_rootfs_dir,
     };
 
-    // Easiest is here to go with the standard mount program as that
-    // will handle everything for us which is relevant to get the
-    // squashfs via squashfuse properly mount without having to
-    // reimplement all the details. Once the mount call comes back
-    // without an error we can expect the image to be mounted.
     auto child = core::posix::exec("/bin/mount", args, {}, core::posix::StandardStream::empty, []() {});
     const auto result = child.wait_for(core::posix::wait::Flags::untraced);
     if (result.status != core::posix::wait::Result::Status::exited ||
         result.detail.if_exited.status != core::posix::exit::Status::success) {
-      ERROR("Failed to mount squashfs Android image");
+      ERROR("Failed to mount bindfs");
       return false;
     }
 
     auto m = common::MountEntry::create(android_rootfs_dir);
     if (!m) {
-      ERROR("Failed to create mount entry for Android rootfs");
+      ERROR("Failed to create mount entry for Android bindfs root");
       return false;
     }
     mounts_.push_back(m);
   } else {
-    ERROR("No loop device or FUSE support found. Can't setup Android rootfs!");
+    ERROR("No bindfs support found. Can't setup Android bindfs root!");
     return false;
   }
 

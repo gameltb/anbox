@@ -55,6 +55,10 @@ std::string anbox::SystemConfiguration::rootfs_dir() const {
   return (data_path / "rootfs").string();
 }
 
+std::string anbox::SystemConfiguration::uid0_rootfs_dir() const {
+  return (data_path / "uid0_rootfs").string();
+}
+
 std::string anbox::SystemConfiguration::overlay_dir() const {
   return (data_path / "rootfs-overlay").string();
 }
