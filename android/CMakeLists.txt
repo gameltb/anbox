@@ -30,7 +30,7 @@ set(HWCOMPOSER_SOURCES
 add_library(hwcomposer.anbox SHARED ${HWCOMPOSER_SOURCES})
 
 set(AUDIO_SOURCES
-    audio/audio_hw.c)
+    audio/audio_hw.cpp)
 add_library(audio.anbox SHARED ${AUDIO_SOURCES})
 
 # As we're adding Android specific bits in this project we can't
