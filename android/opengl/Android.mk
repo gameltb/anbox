@@ -98,10 +98,10 @@ ifeq ($(shell test $(PLATFORM_SDK_VERSION) -lt 16 && echo PreJellyBean),PreJelly
     EMUGL_COMMON_CFLAGS += -DALOGV=LOGV
 endif
 
-ifeq ($(shell test $(PLATFORM_SDK_VERSION) -gt 27 && echo isApi28OrHigher),isApi28OrHigher)
-    BUILD_EMULATOR_VULKAN := true
-    EMUGL_COMMON_CFLAGS += -DGOLDFISH_VULKAN
-endif
+#ifeq ($(shell test $(PLATFORM_SDK_VERSION) -gt 27 && echo isApi28OrHigher),isApi28OrHigher)
+#    BUILD_EMULATOR_VULKAN := true
+#    EMUGL_COMMON_CFLAGS += -DGOLDFISH_VULKAN
+#endif
 
 # Include common definitions used by all the modules included later
 # in this build file. This contains the definition of all useful
