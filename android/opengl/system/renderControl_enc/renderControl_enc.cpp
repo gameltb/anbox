@@ -1436,7 +1436,7 @@ GLint rcCompose_enc(void *self , uint32_t bufferSize, void* buffer)
 	return retval;
 }
 
-GLint rcCreateDisplay_enc(void *self , uint32_t* displayId)
+int rcCreateDisplay_enc(void *self , uint32_t* displayId)
 {
 
 	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
@@ -1463,7 +1463,7 @@ GLint rcCreateDisplay_enc(void *self , uint32_t* displayId)
 	stream->readback(displayId, __size_displayId);
 	if (useChecksum) checksumCalculator->addBuffer(displayId, __size_displayId);
 
-	GLint retval;
+	int retval;
 	stream->readback(&retval, 4);
 	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
 	if (useChecksum) {
@@ -1479,7 +1479,7 @@ GLint rcCreateDisplay_enc(void *self , uint32_t* displayId)
 	return retval;
 }
 
-GLint rcDestroyDisplay_enc(void *self , uint32_t displayId)
+int rcDestroyDisplay_enc(void *self , uint32_t displayId)
 {
 
 	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
@@ -1503,7 +1503,7 @@ GLint rcDestroyDisplay_enc(void *self , uint32_t displayId)
 	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
 
 
-	GLint retval;
+	int retval;
 	stream->readback(&retval, 4);
 	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
 	if (useChecksum) {
@@ -1519,7 +1519,7 @@ GLint rcDestroyDisplay_enc(void *self , uint32_t displayId)
 	return retval;
 }
 
-GLint rcSetDisplayColorBuffer_enc(void *self , uint32_t displayId, uint32_t colorBuffer)
+int rcSetDisplayColorBuffer_enc(void *self , uint32_t displayId, uint32_t colorBuffer)
 {
 
 	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
@@ -1544,7 +1544,7 @@ GLint rcSetDisplayColorBuffer_enc(void *self , uint32_t displayId, uint32_t colo
 	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
 
 
-	GLint retval;
+	int retval;
 	stream->readback(&retval, 4);
 	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
 	if (useChecksum) {
@@ -1560,7 +1560,7 @@ GLint rcSetDisplayColorBuffer_enc(void *self , uint32_t displayId, uint32_t colo
 	return retval;
 }
 
-GLint rcGetDisplayColorBuffer_enc(void *self , uint32_t displayId, uint32_t* colorBuffer)
+int rcGetDisplayColorBuffer_enc(void *self , uint32_t displayId, uint32_t* colorBuffer)
 {
 
 	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
@@ -1588,7 +1588,7 @@ GLint rcGetDisplayColorBuffer_enc(void *self , uint32_t displayId, uint32_t* col
 	stream->readback(colorBuffer, __size_colorBuffer);
 	if (useChecksum) checksumCalculator->addBuffer(colorBuffer, __size_colorBuffer);
 
-	GLint retval;
+	int retval;
 	stream->readback(&retval, 4);
 	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
 	if (useChecksum) {
@@ -1604,7 +1604,7 @@ GLint rcGetDisplayColorBuffer_enc(void *self , uint32_t displayId, uint32_t* col
 	return retval;
 }
 
-GLint rcGetColorBufferDisplay_enc(void *self , uint32_t colorBuffer, uint32_t* displayId)
+int rcGetColorBufferDisplay_enc(void *self , uint32_t colorBuffer, uint32_t* displayId)
 {
 
 	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
@@ -1632,7 +1632,7 @@ GLint rcGetColorBufferDisplay_enc(void *self , uint32_t colorBuffer, uint32_t* d
 	stream->readback(displayId, __size_displayId);
 	if (useChecksum) checksumCalculator->addBuffer(displayId, __size_displayId);
 
-	GLint retval;
+	int retval;
 	stream->readback(&retval, 4);
 	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
 	if (useChecksum) {
@@ -1648,7 +1648,7 @@ GLint rcGetColorBufferDisplay_enc(void *self , uint32_t colorBuffer, uint32_t* d
 	return retval;
 }
 
-GLint rcGetDisplayPose_enc(void *self , uint32_t displayId, uint32_t* x, uint32_t* y, uint32_t* w, uint32_t* h)
+int rcGetDisplayPose_enc(void *self , uint32_t displayId, uint32_t* x, uint32_t* y, uint32_t* w, uint32_t* h)
 {
 
 	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
@@ -1688,7 +1688,7 @@ GLint rcGetDisplayPose_enc(void *self , uint32_t displayId, uint32_t* x, uint32_
 	stream->readback(h, __size_h);
 	if (useChecksum) checksumCalculator->addBuffer(h, __size_h);
 
-	GLint retval;
+	int retval;
 	stream->readback(&retval, 4);
 	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
 	if (useChecksum) {
@@ -1704,7 +1704,7 @@ GLint rcGetDisplayPose_enc(void *self , uint32_t displayId, uint32_t* x, uint32_
 	return retval;
 }
 
-GLint rcSetDisplayPose_enc(void *self , uint32_t displayId, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+int rcSetDisplayPose_enc(void *self , uint32_t displayId, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 
 	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
@@ -1732,7 +1732,7 @@ GLint rcSetDisplayPose_enc(void *self , uint32_t displayId, uint32_t x, uint32_t
 	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
 
 
-	GLint retval;
+	int retval;
 	stream->readback(&retval, 4);
 	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
 	if (useChecksum) {
@@ -1789,6 +1789,306 @@ GLint rcSetColorBufferVulkanMode_enc(void *self , uint32_t colorBuffer, uint32_t
 	return retval;
 }
 
+int rcGetNumDisplays_enc(void *self )
+{
+
+	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
+	IOStream *stream = ctx->m_stream;
+	ChecksumCalculator *checksumCalculator = ctx->m_checksumCalculator;
+	bool useChecksum = checksumCalculator->getVersion() > 0;
+
+	 unsigned char *ptr;
+	 unsigned char *buf;
+	 const size_t sizeWithoutChecksum = 8;
+	 const size_t checksumSize = checksumCalculator->checksumByteSize();
+	 const size_t totalSize = sizeWithoutChecksum + checksumSize;
+	buf = stream->alloc(totalSize);
+	ptr = buf;
+	int tmp = OP_rcGetNumDisplays;memcpy(ptr, &tmp, 4); ptr += 4;
+	memcpy(ptr, &totalSize, 4);  ptr += 4;
+
+
+	if (useChecksum) checksumCalculator->addBuffer(buf, ptr-buf);
+	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
+
+
+	int retval;
+	stream->readback(&retval, 4);
+	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
+	if (useChecksum) {
+		unsigned char *checksumBufPtr = NULL;
+		unsigned char checksumBuf[ChecksumCalculator::kMaxChecksumSize];
+		if (checksumSize > 0) checksumBufPtr = &checksumBuf[0];
+		stream->readback(checksumBufPtr, checksumSize);
+		if (!checksumCalculator->validate(checksumBufPtr, checksumSize)) {
+			ALOGE("rcGetNumDisplays: GL communication error, please report this issue to b.android.com.\n");
+			abort();
+		}
+	}
+	return retval;
+}
+
+int rcGetDisplayWidth_enc(void *self , uint32_t displayId)
+{
+
+	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
+	IOStream *stream = ctx->m_stream;
+	ChecksumCalculator *checksumCalculator = ctx->m_checksumCalculator;
+	bool useChecksum = checksumCalculator->getVersion() > 0;
+
+	 unsigned char *ptr;
+	 unsigned char *buf;
+	 const size_t sizeWithoutChecksum = 8 + 4;
+	 const size_t checksumSize = checksumCalculator->checksumByteSize();
+	 const size_t totalSize = sizeWithoutChecksum + checksumSize;
+	buf = stream->alloc(totalSize);
+	ptr = buf;
+	int tmp = OP_rcGetDisplayWidth;memcpy(ptr, &tmp, 4); ptr += 4;
+	memcpy(ptr, &totalSize, 4);  ptr += 4;
+
+		memcpy(ptr, &displayId, 4); ptr += 4;
+
+	if (useChecksum) checksumCalculator->addBuffer(buf, ptr-buf);
+	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
+
+
+	int retval;
+	stream->readback(&retval, 4);
+	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
+	if (useChecksum) {
+		unsigned char *checksumBufPtr = NULL;
+		unsigned char checksumBuf[ChecksumCalculator::kMaxChecksumSize];
+		if (checksumSize > 0) checksumBufPtr = &checksumBuf[0];
+		stream->readback(checksumBufPtr, checksumSize);
+		if (!checksumCalculator->validate(checksumBufPtr, checksumSize)) {
+			ALOGE("rcGetDisplayWidth: GL communication error, please report this issue to b.android.com.\n");
+			abort();
+		}
+	}
+	return retval;
+}
+
+int rcGetDisplayHeight_enc(void *self , uint32_t displayId)
+{
+
+	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
+	IOStream *stream = ctx->m_stream;
+	ChecksumCalculator *checksumCalculator = ctx->m_checksumCalculator;
+	bool useChecksum = checksumCalculator->getVersion() > 0;
+
+	 unsigned char *ptr;
+	 unsigned char *buf;
+	 const size_t sizeWithoutChecksum = 8 + 4;
+	 const size_t checksumSize = checksumCalculator->checksumByteSize();
+	 const size_t totalSize = sizeWithoutChecksum + checksumSize;
+	buf = stream->alloc(totalSize);
+	ptr = buf;
+	int tmp = OP_rcGetDisplayHeight;memcpy(ptr, &tmp, 4); ptr += 4;
+	memcpy(ptr, &totalSize, 4);  ptr += 4;
+
+		memcpy(ptr, &displayId, 4); ptr += 4;
+
+	if (useChecksum) checksumCalculator->addBuffer(buf, ptr-buf);
+	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
+
+
+	int retval;
+	stream->readback(&retval, 4);
+	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
+	if (useChecksum) {
+		unsigned char *checksumBufPtr = NULL;
+		unsigned char checksumBuf[ChecksumCalculator::kMaxChecksumSize];
+		if (checksumSize > 0) checksumBufPtr = &checksumBuf[0];
+		stream->readback(checksumBufPtr, checksumSize);
+		if (!checksumCalculator->validate(checksumBufPtr, checksumSize)) {
+			ALOGE("rcGetDisplayHeight: GL communication error, please report this issue to b.android.com.\n");
+			abort();
+		}
+	}
+	return retval;
+}
+
+int rcGetDisplayDpiX_enc(void *self , uint32_t displayId)
+{
+
+	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
+	IOStream *stream = ctx->m_stream;
+	ChecksumCalculator *checksumCalculator = ctx->m_checksumCalculator;
+	bool useChecksum = checksumCalculator->getVersion() > 0;
+
+	 unsigned char *ptr;
+	 unsigned char *buf;
+	 const size_t sizeWithoutChecksum = 8 + 4;
+	 const size_t checksumSize = checksumCalculator->checksumByteSize();
+	 const size_t totalSize = sizeWithoutChecksum + checksumSize;
+	buf = stream->alloc(totalSize);
+	ptr = buf;
+	int tmp = OP_rcGetDisplayDpiX;memcpy(ptr, &tmp, 4); ptr += 4;
+	memcpy(ptr, &totalSize, 4);  ptr += 4;
+
+		memcpy(ptr, &displayId, 4); ptr += 4;
+
+	if (useChecksum) checksumCalculator->addBuffer(buf, ptr-buf);
+	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
+
+
+	int retval;
+	stream->readback(&retval, 4);
+	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
+	if (useChecksum) {
+		unsigned char *checksumBufPtr = NULL;
+		unsigned char checksumBuf[ChecksumCalculator::kMaxChecksumSize];
+		if (checksumSize > 0) checksumBufPtr = &checksumBuf[0];
+		stream->readback(checksumBufPtr, checksumSize);
+		if (!checksumCalculator->validate(checksumBufPtr, checksumSize)) {
+			ALOGE("rcGetDisplayDpiX: GL communication error, please report this issue to b.android.com.\n");
+			abort();
+		}
+	}
+	return retval;
+}
+
+int rcGetDisplayDpiY_enc(void *self , uint32_t displayId)
+{
+
+	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
+	IOStream *stream = ctx->m_stream;
+	ChecksumCalculator *checksumCalculator = ctx->m_checksumCalculator;
+	bool useChecksum = checksumCalculator->getVersion() > 0;
+
+	 unsigned char *ptr;
+	 unsigned char *buf;
+	 const size_t sizeWithoutChecksum = 8 + 4;
+	 const size_t checksumSize = checksumCalculator->checksumByteSize();
+	 const size_t totalSize = sizeWithoutChecksum + checksumSize;
+	buf = stream->alloc(totalSize);
+	ptr = buf;
+	int tmp = OP_rcGetDisplayDpiY;memcpy(ptr, &tmp, 4); ptr += 4;
+	memcpy(ptr, &totalSize, 4);  ptr += 4;
+
+		memcpy(ptr, &displayId, 4); ptr += 4;
+
+	if (useChecksum) checksumCalculator->addBuffer(buf, ptr-buf);
+	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
+
+
+	int retval;
+	stream->readback(&retval, 4);
+	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
+	if (useChecksum) {
+		unsigned char *checksumBufPtr = NULL;
+		unsigned char checksumBuf[ChecksumCalculator::kMaxChecksumSize];
+		if (checksumSize > 0) checksumBufPtr = &checksumBuf[0];
+		stream->readback(checksumBufPtr, checksumSize);
+		if (!checksumCalculator->validate(checksumBufPtr, checksumSize)) {
+			ALOGE("rcGetDisplayDpiY: GL communication error, please report this issue to b.android.com.\n");
+			abort();
+		}
+	}
+	return retval;
+}
+
+int rcGetDisplayVsyncPeriod_enc(void *self , uint32_t displayId)
+{
+
+	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
+	IOStream *stream = ctx->m_stream;
+	ChecksumCalculator *checksumCalculator = ctx->m_checksumCalculator;
+	bool useChecksum = checksumCalculator->getVersion() > 0;
+
+	 unsigned char *ptr;
+	 unsigned char *buf;
+	 const size_t sizeWithoutChecksum = 8 + 4;
+	 const size_t checksumSize = checksumCalculator->checksumByteSize();
+	 const size_t totalSize = sizeWithoutChecksum + checksumSize;
+	buf = stream->alloc(totalSize);
+	ptr = buf;
+	int tmp = OP_rcGetDisplayVsyncPeriod;memcpy(ptr, &tmp, 4); ptr += 4;
+	memcpy(ptr, &totalSize, 4);  ptr += 4;
+
+		memcpy(ptr, &displayId, 4); ptr += 4;
+
+	if (useChecksum) checksumCalculator->addBuffer(buf, ptr-buf);
+	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
+
+
+	int retval;
+	stream->readback(&retval, 4);
+	if (useChecksum) checksumCalculator->addBuffer(&retval, 4);
+	if (useChecksum) {
+		unsigned char *checksumBufPtr = NULL;
+		unsigned char checksumBuf[ChecksumCalculator::kMaxChecksumSize];
+		if (checksumSize > 0) checksumBufPtr = &checksumBuf[0];
+		stream->readback(checksumBufPtr, checksumSize);
+		if (!checksumCalculator->validate(checksumBufPtr, checksumSize)) {
+			ALOGE("rcGetDisplayVsyncPeriod: GL communication error, please report this issue to b.android.com.\n");
+			abort();
+		}
+	}
+	return retval;
+}
+
+void rcPostLayer_enc(void *self , const char* name, uint32_t colorBuffer, float alpha, int32_t sourceCropLeft, int32_t sourceCropTop, int32_t sourceCropRight, int32_t sourceCropBottom, int32_t displayFrameLeft, int32_t displayFrameTop, int32_t displayFrameRight, int32_t displayFrameBottom)
+{
+
+	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
+	IOStream *stream = ctx->m_stream;
+	ChecksumCalculator *checksumCalculator = ctx->m_checksumCalculator;
+	bool useChecksum = checksumCalculator->getVersion() > 0;
+
+	const unsigned int __size_name =  (strlen(name) + 1);
+	 unsigned char *ptr;
+	 unsigned char *buf;
+	 const size_t sizeWithoutChecksum = 8 + __size_name + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1*4;
+	 const size_t checksumSize = checksumCalculator->checksumByteSize();
+	 const size_t totalSize = sizeWithoutChecksum + checksumSize;
+	buf = stream->alloc(totalSize);
+	ptr = buf;
+	int tmp = OP_rcPostLayer;memcpy(ptr, &tmp, 4); ptr += 4;
+	memcpy(ptr, &totalSize, 4);  ptr += 4;
+
+	*(unsigned int *)(ptr) = __size_name; ptr += 4;
+	memcpy(ptr, name, __size_name);ptr += __size_name;
+		memcpy(ptr, &colorBuffer, 4); ptr += 4;
+		memcpy(ptr, &alpha, 4); ptr += 4;
+		memcpy(ptr, &sourceCropLeft, 4); ptr += 4;
+		memcpy(ptr, &sourceCropTop, 4); ptr += 4;
+		memcpy(ptr, &sourceCropRight, 4); ptr += 4;
+		memcpy(ptr, &sourceCropBottom, 4); ptr += 4;
+		memcpy(ptr, &displayFrameLeft, 4); ptr += 4;
+		memcpy(ptr, &displayFrameTop, 4); ptr += 4;
+		memcpy(ptr, &displayFrameRight, 4); ptr += 4;
+		memcpy(ptr, &displayFrameBottom, 4); ptr += 4;
+
+	if (useChecksum) checksumCalculator->addBuffer(buf, ptr-buf);
+	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
+
+}
+
+void rcPostAllLayersDone_enc(void *self )
+{
+
+	renderControl_encoder_context_t *ctx = (renderControl_encoder_context_t *)self;
+	IOStream *stream = ctx->m_stream;
+	ChecksumCalculator *checksumCalculator = ctx->m_checksumCalculator;
+	bool useChecksum = checksumCalculator->getVersion() > 0;
+
+	 unsigned char *ptr;
+	 unsigned char *buf;
+	 const size_t sizeWithoutChecksum = 8;
+	 const size_t checksumSize = checksumCalculator->checksumByteSize();
+	 const size_t totalSize = sizeWithoutChecksum + checksumSize;
+	buf = stream->alloc(totalSize);
+	ptr = buf;
+	int tmp = OP_rcPostAllLayersDone;memcpy(ptr, &tmp, 4); ptr += 4;
+	memcpy(ptr, &totalSize, 4);  ptr += 4;
+
+
+	if (useChecksum) checksumCalculator->addBuffer(buf, ptr-buf);
+	if (useChecksum) checksumCalculator->writeChecksum(ptr, checksumSize); ptr += checksumSize;
+
+}
+
 }  // namespace
 
 renderControl_encoder_context_t::renderControl_encoder_context_t(IOStream *stream, ChecksumCalculator *checksumCalculator)
@@ -1842,5 +2142,13 @@ renderControl_encoder_context_t::renderControl_encoder_context_t(IOStream *strea
 	this->rcGetDisplayPose = &rcGetDisplayPose_enc;
 	this->rcSetDisplayPose = &rcSetDisplayPose_enc;
 	this->rcSetColorBufferVulkanMode = &rcSetColorBufferVulkanMode_enc;
+	this->rcGetNumDisplays = &rcGetNumDisplays_enc;
+	this->rcGetDisplayWidth = &rcGetDisplayWidth_enc;
+	this->rcGetDisplayHeight = &rcGetDisplayHeight_enc;
+	this->rcGetDisplayDpiX = &rcGetDisplayDpiX_enc;
+	this->rcGetDisplayDpiY = &rcGetDisplayDpiY_enc;
+	this->rcGetDisplayVsyncPeriod = &rcGetDisplayVsyncPeriod_enc;
+	this->rcPostLayer = &rcPostLayer_enc;
+	this->rcPostAllLayersDone = &rcPostAllLayersDone_enc;
 }
 

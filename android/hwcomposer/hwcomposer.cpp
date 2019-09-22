@@ -291,16 +291,19 @@ static int hwc_get_display_attributes(hwc_composer_device_1* dev,
 }
 
 static int hwc_device_open(const hw_module_t* module, const char* name, hw_device_t** device) {
-    ALOGD("%s", __PRETTY_FUNCTION__);
+    ALOGD("%s called with name %s", __FUNCTION__, name);
 
-    if (strcmp(name, HWC_HARDWARE_COMPOSER) != 0)
-        return -EINVAL;
+    if (strcmp(name, HWC_HARDWARE_COMPOSER) != 0) {
+      ALOGE("%s called with bad name %s", __FUNCTION__, name);
+      return -EINVAL;
+    }
 
     auto dev = new HwcContext;
     dev->device.common.tag = HARDWARE_DEVICE_TAG;
-    dev->device.common.version = HWC_DEVICE_API_VERSION_1_0;
+    dev->device.common.version = HWC_DEVICE_API_VERSION_1_1;
     dev->device.common.module = const_cast<hw_module_t*>(module);
     dev->device.common.close = hwc_device_close;
+
     dev->device.prepare = hwc_prepare;
     dev->device.set = hwc_set;
     dev->device.eventControl = hwc_event_control;
@@ -323,8 +326,8 @@ static hw_module_methods_t hwc_module_methods = {
 hwc_module_t HAL_MODULE_INFO_SYM = {
     .common = {
         .tag = HARDWARE_MODULE_TAG,
-        .module_api_version = HWC_DEVICE_API_VERSION_1_0,
-        .hal_api_version = HARDWARE_HAL_API_VERSION,
+        .version_major = 1,
+        .version_minor = 0,
         .id = HWC_HARDWARE_MODULE_ID,
         .name = "Hardware Composer Module",
         .author = "Anbox Developers",

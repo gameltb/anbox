@@ -49,7 +49,15 @@
 #define OP_rcGetDisplayPose 					10043
 #define OP_rcSetDisplayPose 					10044
 #define OP_rcSetColorBufferVulkanMode 					10045
-#define OP_last 					10046
+#define OP_rcGetNumDisplays 					10046
+#define OP_rcGetDisplayWidth 					10047
+#define OP_rcGetDisplayHeight 					10048
+#define OP_rcGetDisplayDpiX 					10049
+#define OP_rcGetDisplayDpiY 					10050
+#define OP_rcGetDisplayVsyncPeriod 					10051
+#define OP_rcPostLayer 					10052
+#define OP_rcPostAllLayersDone 					10053
+#define OP_last 					10054
 
 
 #endif

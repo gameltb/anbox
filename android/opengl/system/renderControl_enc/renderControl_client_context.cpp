@@ -56,6 +56,14 @@ int renderControl_client_context_t::initDispatchByName(void *(*getProc)(const ch
 	rcGetDisplayPose = (rcGetDisplayPose_client_proc_t) getProc("rcGetDisplayPose", userData);
 	rcSetDisplayPose = (rcSetDisplayPose_client_proc_t) getProc("rcSetDisplayPose", userData);
 	rcSetColorBufferVulkanMode = (rcSetColorBufferVulkanMode_client_proc_t) getProc("rcSetColorBufferVulkanMode", userData);
+	rcGetNumDisplays = (rcGetNumDisplays_client_proc_t) getProc("rcGetNumDisplays", userData);
+	rcGetDisplayWidth = (rcGetDisplayWidth_client_proc_t) getProc("rcGetDisplayWidth", userData);
+	rcGetDisplayHeight = (rcGetDisplayHeight_client_proc_t) getProc("rcGetDisplayHeight", userData);
+	rcGetDisplayDpiX = (rcGetDisplayDpiX_client_proc_t) getProc("rcGetDisplayDpiX", userData);
+	rcGetDisplayDpiY = (rcGetDisplayDpiY_client_proc_t) getProc("rcGetDisplayDpiY", userData);
+	rcGetDisplayVsyncPeriod = (rcGetDisplayVsyncPeriod_client_proc_t) getProc("rcGetDisplayVsyncPeriod", userData);
+	rcPostLayer = (rcPostLayer_client_proc_t) getProc("rcPostLayer", userData);
+	rcPostAllLayersDone = (rcPostAllLayersDone_client_proc_t) getProc("rcPostAllLayersDone", userData);
 	return 0;
 }
 

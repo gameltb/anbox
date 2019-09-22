@@ -56,6 +56,14 @@ struct renderControl_client_context_t {
 	rcGetDisplayPose_client_proc_t rcGetDisplayPose;
 	rcSetDisplayPose_client_proc_t rcSetDisplayPose;
 	rcSetColorBufferVulkanMode_client_proc_t rcSetColorBufferVulkanMode;
+	rcGetNumDisplays_client_proc_t rcGetNumDisplays;
+	rcGetDisplayWidth_client_proc_t rcGetDisplayWidth;
+	rcGetDisplayHeight_client_proc_t rcGetDisplayHeight;
+	rcGetDisplayDpiX_client_proc_t rcGetDisplayDpiX;
+	rcGetDisplayDpiY_client_proc_t rcGetDisplayDpiY;
+	rcGetDisplayVsyncPeriod_client_proc_t rcGetDisplayVsyncPeriod;
+	rcPostLayer_client_proc_t rcPostLayer;
+	rcPostAllLayersDone_client_proc_t rcPostAllLayersDone;
 	virtual ~renderControl_client_context_t() {}
 
 	typedef renderControl_client_context_t *CONTEXT_ACCESSOR_TYPE(void);

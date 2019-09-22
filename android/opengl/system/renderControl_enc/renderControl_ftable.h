@@ -54,6 +54,14 @@ static const struct _renderControl_funcs_by_name {
 	{"rcGetDisplayPose", (void*)rcGetDisplayPose},
 	{"rcSetDisplayPose", (void*)rcSetDisplayPose},
 	{"rcSetColorBufferVulkanMode", (void*)rcSetColorBufferVulkanMode},
+	{"rcGetNumDisplays", (void*)rcGetNumDisplays},
+	{"rcGetDisplayWidth", (void*)rcGetDisplayWidth},
+	{"rcGetDisplayHeight", (void*)rcGetDisplayHeight},
+	{"rcGetDisplayDpiX", (void*)rcGetDisplayDpiX},
+	{"rcGetDisplayDpiY", (void*)rcGetDisplayDpiY},
+	{"rcGetDisplayVsyncPeriod", (void*)rcGetDisplayVsyncPeriod},
+	{"rcPostLayer", (void*)rcPostLayer},
+	{"rcPostAllLayersDone", (void*)rcPostAllLayersDone},
 };
 static const int renderControl_num_funcs = sizeof(renderControl_funcs_by_name) / sizeof(struct _renderControl_funcs_by_name);
 
