@@ -144,10 +144,6 @@ bool anbox::cmds::ContainerManager::setup_mounts() {
   if (!fs::exists(android_rootfs_dir))
     fs::create_directory(android_rootfs_dir);
 
-  const auto android_uid0_rootfs_dir = SystemConfiguration::instance().uid0_rootfs_dir();
-  if (!fs::exists(android_uid0_rootfs_dir))
-    fs::create_directory(android_uid0_rootfs_dir);
-
   // We prefer using the kernel for mounting the squashfs image but
   // for some cases (unprivileged containers) where no loop support
   // is available we do the mount instead via squashfuse which will
@@ -170,7 +166,7 @@ bool anbox::cmds::ContainerManager::setup_mounts() {
       return false;
     }
 
-    auto m = common::MountEntry::create(loop_device, android_uid0_rootfs_dir, "ext4", MS_MGC_VAL | MS_RDONLY | MS_PRIVATE);
+    auto m = common::MountEntry::create(loop_device, android_rootfs_dir, "ext4", MS_MGC_VAL | MS_RDONLY | MS_PRIVATE);
     if (!m) {
       ERROR("Failed to mount Android rootfs");
       return false;
@@ -178,36 +174,6 @@ bool anbox::cmds::ContainerManager::setup_mounts() {
     mounts_.push_back(m);
   } else {
     ERROR("No loop device support found. Can't setup Android rootfs!");
-    return false;
-  }
-
-  // Use bindfs for uidshift
-  if (!utils::find_program_on_path("bindfs").empty()) {
-    std::vector<std::string> args = {
-        "-t", "fuse.bindfs",
-        "-o", "--uid-offset=100000",
-        "-o", "--gid-offset=100000",
-        "-o", "ro",
-        android_uid0_rootfs_dir,
-        android_rootfs_dir,
-    };
-
-    auto child = core::posix::exec("/bin/mount", args, {}, core::posix::StandardStream::empty, []() {});
-    const auto result = child.wait_for(core::posix::wait::Flags::untraced);
-    if (result.status != core::posix::wait::Result::Status::exited ||
-        result.detail.if_exited.status != core::posix::exit::Status::success) {
-      ERROR("Failed to mount bindfs");
-      return false;
-    }
-
-    auto m = common::MountEntry::create(android_rootfs_dir);
-    if (!m) {
-      ERROR("Failed to create mount entry for Android bindfs root");
-      return false;
-    }
-    mounts_.push_back(m);
-  } else {
-    ERROR("No bindfs support found. Can't setup Android bindfs root!");
     return false;
   }
 
