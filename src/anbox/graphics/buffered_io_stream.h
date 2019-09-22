@@ -42,10 +42,6 @@ class BufferedIOStream : public IOStream {
   int commitBuffer(size_t size) override;
   const unsigned char *readRaw(void *buf, size_t *inout_len) override;
 
-  const unsigned char *readRaw_pub(void *buf, size_t *len) {
-    return readRaw(buf, len);
-  }
-
   int writeFully(const void *buf, size_t len) override;
   const unsigned char *readFully(void *buf, size_t len) override;
   void *getDmaForReading(uint64_t guest_paddr) override;
