@@ -71,6 +71,8 @@ typedef int QEMU_PIPE_HANDLE;
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 #ifndef D
 #  define  D(...)   do{}while(0)
@@ -114,16 +116,37 @@ static __inline__ QEMU_PIPE_HANDLE
 qemu_pipe_open(const char* pipeName) {
     char  buff[256];
     int   buffLen;
-    QEMU_PIPE_HANDLE   fd;
+    QEMU_PIPE_HANDLE   fd = -1;
 
     if (pipeName == NULL || pipeName[0] == '\0') {
         errno = EINVAL;
         return -1;
     }
 
+    memset(buff, 0, sizeof(buff));
     snprintf(buff, sizeof buff, "pipe:%s", pipeName);
 
+#if 0
     fd = TEMP_FAILURE_RETRY(open(QEMU_PIPE_PATH, O_RDWR));
+#else
+    fd = socket(AF_LOCAL, SOCK_STREAM, 0);
+
+    struct sockaddr_un addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+    strncpy(addr.sun_path, QEMU_PIPE_PATH, sizeof(addr.sun_path));
+
+    if (connect(fd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+#if !defined(QEMU_PIPE_FROM_ADB)
+      close(fd);
+#else
+      // Adb renames 'close' to 'unix_close' and marks the original
+      // 'close' as not available.
+      unix_close(fd);
+#endif
+      fd = -1;
+    }
+#endif
     if (fd < 0 && errno == ENOENT)
         fd = TEMP_FAILURE_RETRY(open("/dev/goldfish_pipe", O_RDWR));
     if (fd < 0) {
