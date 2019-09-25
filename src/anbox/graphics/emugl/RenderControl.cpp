@@ -368,6 +368,96 @@ static void rcSelectChecksumHelper(uint32_t protocol, uint32_t) {
   ChecksumCalculatorThreadInfo::setVersion(protocol);
 }
 
+static void rcFlushWindowColorBufferAsync(uint32_t windowSurface) {
+  rcFlushWindowColorBuffer(windowSurface);
+}
+
+// |rcCreateSyncKHR| implements the guest's |eglCreateSyncKHR| by calling the
+// host's implementation of |eglCreateSyncKHR|. A SyncThread is also notified
+// for purposes of signaling any native fence fd's that get created in the
+// guest off the sync object created here.
+static void rcCreateSyncKHR(EGLenum type,
+                            EGLint *attribs,
+                            uint32_t num_attribs,
+                            int destroy_when_signaled,
+                            uint64_t *eglsync_out,
+                            uint64_t *syncthread_out) {
+}
+
+// |rcClientWaitSyncKHR| implements |eglClientWaitSyncKHR|
+// on the guest through using the host's existing
+// |eglClientWaitSyncKHR| implementation, which is done
+// through the FenceSync object.
+static EGLint rcClientWaitSyncKHR(uint64_t handle,
+                                  EGLint flags,
+                                  uint64_t timeout) {
+}
+
+static void rcWaitSyncKHR(uint64_t handle,
+                          EGLint flags) {
+}
+
+static int rcDestroySyncKHR(uint64_t handle) {
+  return 0;
+}
+
+static void rcSetPuid(uint64_t puid) {
+  RenderThreadInfo *tInfo = RenderThreadInfo::get();
+  puid;
+}
+
+static int rcCompose(uint32_t bufferSize, void *buffer) {
+    return -1;
+}
+
+static int rcCreateDisplay(uint32_t *displayId) {
+    return -1;
+}
+
+static int rcDestroyDisplay(uint32_t displayId) {
+    return -1;
+}
+
+static int rcSetDisplayColorBuffer(uint32_t displayId, uint32_t colorBuffer) {
+    return -1;
+}
+
+static int rcGetDisplayColorBuffer(uint32_t displayId, uint32_t *colorBuffer) {
+    return -1;
+}
+
+static int rcGetColorBufferDisplay(uint32_t colorBuffer, uint32_t *displayId) {
+    return -1;
+}
+
+static int rcGetDisplayPose(uint32_t displayId, uint32_t *x, uint32_t *y, uint32_t *w, uint32_t *h) {
+    return -1;
+}
+
+static int rcSetDisplayPose(uint32_t displayId, uint32_t x, uint32_t y, uint32_t w, uint32_t h) {
+    return -1;
+}
+
+static int rcSetColorBufferVulkanMode(uint32_t colorBuffer, uint32_t mode) {
+  return -1;
+}
+
+static int rcUpdateColorBufferDMA(uint32_t colorBuffer,
+                                  GLint x, GLint y,
+                                  GLint width, GLint height,
+                                  GLenum format, GLenum type,
+                                  void *pixels, uint32_t pixels_size) {
+  renderer->updateColorBuffer(colorBuffer, x, y, width, height,
+                              format, type, pixels);
+  return 0;
+}
+
+static uint32_t rcCreateColorBufferDMA(uint32_t width,
+                                       uint32_t height, GLenum internalFormat,
+                                       int frameworkFormat) {
+  return renderer->createColorBuffer(width, height, internalFormat);
+}
+
 int rcGetNumDisplays() {
   // For now we only support a single display but that single display
   // will contain more than one display so that we simply spawn up a big
@@ -464,6 +554,23 @@ void initRenderControlContext(renderControl_decoder_context_t *dec) {
   dec->rcCreateClientImage = rcCreateClientImage;
   dec->rcDestroyClientImage = rcDestroyClientImage;
   dec->rcSelectChecksumHelper = rcSelectChecksumHelper;
+  dec->rcCreateSyncKHR = rcCreateSyncKHR;
+  dec->rcClientWaitSyncKHR = rcClientWaitSyncKHR;
+  dec->rcFlushWindowColorBufferAsync = rcFlushWindowColorBufferAsync;
+  dec->rcDestroySyncKHR = rcDestroySyncKHR;
+  dec->rcSetPuid = rcSetPuid;
+  dec->rcUpdateColorBufferDMA = rcUpdateColorBufferDMA;
+  dec->rcCreateColorBufferDMA = rcCreateColorBufferDMA;
+  dec->rcWaitSyncKHR = rcWaitSyncKHR;
+  dec->rcCompose = rcCompose;
+  dec->rcCreateDisplay = rcCreateDisplay;
+  dec->rcDestroyDisplay = rcDestroyDisplay;
+  dec->rcSetDisplayColorBuffer = rcSetDisplayColorBuffer;
+  dec->rcGetDisplayColorBuffer = rcGetDisplayColorBuffer;
+  dec->rcGetColorBufferDisplay = rcGetColorBufferDisplay;
+  dec->rcGetDisplayPose = rcGetDisplayPose;
+  dec->rcSetDisplayPose = rcSetDisplayPose;
+  dec->rcSetColorBufferVulkanMode = rcSetColorBufferVulkanMode;
   dec->rcGetNumDisplays = rcGetNumDisplays;
   dec->rcGetDisplayWidth = rcGetDisplayWidth;
   dec->rcGetDisplayHeight = rcGetDisplayHeight;
