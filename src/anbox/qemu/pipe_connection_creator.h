@@ -54,6 +54,7 @@ class PipeConnectionCreator
     qemud_gsm,
     qemud_adb,
     bootanimation,
+    GLProcessPipe,
   };
 
  private:

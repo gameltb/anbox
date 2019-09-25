@@ -31,6 +31,7 @@
 #include "anbox/qemu/null_message_processor.h"
 #include "anbox/qemu/pipe_connection_creator.h"
 #include "anbox/qemu/sensors_message_processor.h"
+#include "anbox/qemu/GLProcessPipe_message_processor.h"
 
 namespace ba = boost::asio;
 
@@ -56,6 +57,8 @@ std::string client_type_to_string(
       return "adb";
     case anbox::qemu::PipeConnectionCreator::client_type::bootanimation:
       return "boot-animation";
+    case anbox::qemu::PipeConnectionCreator::client_type::GLProcessPipe:
+      return "GLProcessPipe";
     case anbox::qemu::PipeConnectionCreator::client_type::invalid:
       break;
     default:
@@ -139,6 +142,8 @@ PipeConnectionCreator::client_type PipeConnectionCreator::identify_client(
     return client_type::bootanimation;
   else if (utils::string_starts_with(identifier_and_args, "pipe:qemud:adb"))
     return client_type::qemud_adb;
+  else if (utils::string_starts_with(identifier_and_args, "pipe:GLProcessPipe"))
+    return client_type::GLProcessPipe;
 
   return client_type::invalid;
 }
@@ -163,6 +168,8 @@ PipeConnectionCreator::create_processor(
     return std::make_shared<qemu::GsmMessageProcessor>(messenger);
   else if (type == client_type::qemud_adb)
     return std::make_shared<qemu::AdbMessageProcessor>(runtime_, messenger);
+  else if (type == client_type::GLProcessPipe)
+    return std::make_shared<qemu::GLProcessPipeMessageProcessor>(messenger);
 
   return std::make_shared<qemu::NullMessageProcessor>();
 }
