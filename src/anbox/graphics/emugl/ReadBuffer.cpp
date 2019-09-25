@@ -30,36 +30,66 @@ ReadBuffer::ReadBuffer(size_t bufsize) {
 
 ReadBuffer::~ReadBuffer() { free(m_buf); }
 
-int ReadBuffer::getData(IOStream* stream) {
-  if (stream == NULL) return -1;
-  if ((m_validData > 0) && (m_readPtr > m_buf)) {
-    memmove(m_buf, m_readPtr, m_validData);
-  }
-  // get fresh data into the buffer;
-  size_t len = m_size - m_validData;
-  if (len == 0) {
-    // we need to inc our buffer
-    size_t new_size = m_size * 2;
-    unsigned char* new_buf;
-    if (new_size < m_size) {  // overflow check
-      new_size = INT_MAX;
-    }
+int ReadBuffer::getData(IOStream* stream, int minSize) {
+  assert(stream);
+  assert(minSize > (int)m_validData);
 
-    new_buf = static_cast<unsigned char*>(realloc(m_buf, new_size));
-    if (!new_buf) {
-      ERROR("Failed to alloc %zu bytes for ReadBuffer", new_size);
-      return -1;
+  const int minSizeToRead = minSize - m_validData;
+  int maxSizeToRead;
+  const int freeTailSize = m_buf + m_size - (m_readPtr + m_validData);
+  if (freeTailSize >= minSizeToRead) {
+    maxSizeToRead = freeTailSize;
+  } else {
+    if (freeTailSize + (m_readPtr - m_buf) >= minSizeToRead) {
+      // There's some gap in the beginning, if we move the data over it
+      // that's going to be enough.
+      memmove(m_buf, m_readPtr, m_validData);
+    } else {
+      // Not enough space even with moving, reallocate.
+      // Note: make sure we can fit at least two of the requested packets
+      //  into the new buffer to minimize the reallocations and
+      //  memmove()-ing stuff around.
+      size_t new_size = std::max<size_t>(
+          2 * minSizeToRead + m_validData,
+          2 * m_size);
+      if (new_size < m_size) {  // overflow check
+        new_size = INT_MAX;
+      }
+
+      const auto new_buf = (unsigned char*)malloc(new_size);
+      if (!new_buf) {
+        ERR("Failed to alloc %zu bytes for ReadBuffer\n", new_size);
+        return -1;
+      }
+
+      memcpy(new_buf, m_readPtr, m_validData);
+      free(m_buf);
+      m_buf = new_buf;
+      m_size = new_size;
     }
-    m_size = new_size;
-    m_buf = new_buf;
-    len = m_size - m_validData;
+    // We can read more now, let's request it in case all data is ready
+    // for reading.
+    maxSizeToRead = m_size - m_validData;
+    m_readPtr = m_buf;
   }
-  m_readPtr = m_buf;
-  if (NULL != stream->read(m_buf + m_validData, len)) {
-    m_validData += len;
-    return len;
-  }
-  return -1;
+
+  // get fresh data into the buffer;
+  int readTotal = 0;
+  do {
+    const size_t readNow = stream->read(m_readPtr + m_validData,
+                                        maxSizeToRead - readTotal);
+    if (!readNow) {
+      if (readTotal > 0) {
+        return readTotal;
+      } else {
+        return -1;
+      }
+    }
+    readTotal += readNow;
+    m_validData += readNow;
+  } while (readTotal < minSizeToRead);
+
+  return readTotal;
 }
 
 void ReadBuffer::consume(size_t amount) {

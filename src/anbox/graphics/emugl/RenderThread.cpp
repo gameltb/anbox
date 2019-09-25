@@ -56,39 +56,57 @@ intptr_t RenderThread::main() {
   ReadBuffer readBuf(STREAM_BUFFER_SIZE);
 
   while (true) {
-    int stat = readBuf.getData(m_stream);
-    if (stat <= 0)
-      break;
+    int packetSize;
+    if (readBuf.validData() >= 8) {
+      // We know that packet size is the second int32_t from the start.
+      packetSize = *(const int32_t *)(readBuf.buf() + 4);
+    } else {
+      // Read enough data to at least be able to get the packet size next
+      // time.
+      packetSize = 8;
+    }
 
-    bool progress;
-    do {
-      progress = false;
-
-      std::unique_lock<std::mutex> l(m_lock);
-
-      size_t last =
-          threadInfo.m_glDec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
-      if (last > 0) {
-        progress = true;
-        readBuf.consume(last);
+    int stat = 0;
+    if (packetSize > (int)readBuf.validData()) {
+      stat = readBuf.getData(m_stream, packetSize);
+      if (stat <= 0) {
+          DEBUG("Warning: render thread could not read data from stream");
+          break;
+        }
       }
 
-      last =
-          threadInfo.m_gl2Dec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
-      if (last > 0) {
-        progress = true;
-        readBuf.consume(last);
-      }
+      bool progress;
+      do {
+        progress = false;
 
-      last = threadInfo.m_rcDec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
-      if (last > 0) {
-        readBuf.consume(last);
-        progress = true;
-      }
+        std::unique_lock<std::mutex> l(m_lock);
 
-    } while (progress);
+        DEBUG("render thread read %d bytes, op %d, packet size %d",
+              (int)readBuf.validData(), *(int32_t *)readBuf.buf(),
+              *(int32_t *)(readBuf.buf() + 4));
 
-  }
+        size_t last =
+            threadInfo.m_glDec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
+        if (last > 0) {
+          progress = true;
+          readBuf.consume(last);
+        }
+
+        last =
+            threadInfo.m_gl2Dec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
+        if (last > 0) {
+          progress = true;
+          readBuf.consume(last);
+        }
+
+        last = threadInfo.m_rcDec.decode(readBuf.buf(), readBuf.validData(), m_stream, &checksumCalc);
+        if (last > 0) {
+          readBuf.consume(last);
+          progress = true;
+        }
+
+      } while (progress);
+    }
 
   //threadInfo.m_gl2Dec.freeShader();
   //threadInfo.m_gl2Dec.freeProgram();
