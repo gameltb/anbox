@@ -68,6 +68,7 @@ on boot
 on fs
         mount_all /fstab.goldfish
         setprop ro.crypto.state unencrypted
+        trigger nonencrypted
 
 #emulator is not much useful before boot complete
 #start it later

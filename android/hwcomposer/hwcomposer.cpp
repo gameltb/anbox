@@ -146,6 +146,10 @@ static void check_sync_fds(size_t numDisplays, hwc_display_contents_1_t** displa
     unsigned int i, j;
     for (i = 0; i < numDisplays; i++) {
         hwc_display_contents_1_t* list = displays[i];
+        if (!list) {
+          ALOGW("displays[%u] was null", i);
+          continue;
+        }
         if (list->retireFenceFd >= 0) {
             ALOGW("retireFenceFd[%u] was %d", i, list->retireFenceFd);
             list->retireFenceFd = -1;
@@ -169,6 +173,8 @@ static void check_sync_fds(size_t numDisplays, hwc_display_contents_1_t** displa
 static int hwc_set(hwc_composer_device_1_t* dev, size_t numDisplays,
                    hwc_display_contents_1_t** displays) {
     auto context = reinterpret_cast<HwcContext*>(dev);
+
+    ALOGE("numDisplays %d\n", numDisplays);
 
     if (displays == NULL || displays[0] == NULL)
         return -EFAULT;

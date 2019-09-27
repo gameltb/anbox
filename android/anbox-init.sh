@@ -54,6 +54,9 @@ mount -o bind /data/fake_mmap_rnd_bits /proc/sys/vm/mmap_rnd_bits
 echo  0 > /data/fake_kptr_restrict
 mount -o bind /data/fake_kptr_restrict /proc/sys/kernel/kptr_restrict
 
+echo  0 > /data/fake_sysrq-trigger
+mount -o bind /data/fake_sysrq-trigger /proc/sysrq-trigger
+
 mount -o bind /sys/fs/cgroup/cpu,cpuacct /acct
 
 mkdir /dev/cpuctl
