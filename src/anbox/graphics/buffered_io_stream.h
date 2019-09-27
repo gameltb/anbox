@@ -49,7 +49,7 @@ class BufferedIOStream : public IOStream {
   void onSave(android::base::Stream *stream) override;
   unsigned char *onLoad(android::base::Stream *stream) override;
 
-  void forceStop();
+  void forceStop() override;
   void post_data(Buffer &&data);
 
   bool needs_data();

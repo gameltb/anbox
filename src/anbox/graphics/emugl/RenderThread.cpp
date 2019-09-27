@@ -40,8 +40,8 @@ RenderThread *RenderThread::create(const std::shared_ptr<Renderer> &renderer, IO
   return new RenderThread(renderer, stream, m);
 }
 
-void RenderThread::forceStop() { 
-  //m_stream->forceStop();
+void RenderThread::forceStop() {
+  m_stream->forceStop();
 }
 
 intptr_t RenderThread::main() {

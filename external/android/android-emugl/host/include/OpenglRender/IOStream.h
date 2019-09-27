@@ -98,6 +98,8 @@ public:
         m_buf = haveBuf ? buf : nullptr;
     }
 
+    virtual void forceStop() = 0;
+
     virtual void* getDmaForReading(uint64_t guest_paddr) = 0;
     virtual void unlockDma(uint64_t guest_paddr) = 0;
 
