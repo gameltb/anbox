@@ -488,7 +488,7 @@ int rcGetDisplayDpiY(uint32_t display_id) {
 
 int rcGetDisplayVsyncPeriod(uint32_t display_id) {
   (void)display_id;
-  return 1;
+  return 1000 * 1000 * 1000 / 60;  // vsync is 60 hz
 }
 
 static std::vector<Renderable> frame_layers;
