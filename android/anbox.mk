@@ -49,13 +49,13 @@ PRODUCT_PACKAGES += \
     CarrierConfig \
     audio.r_submix.default \
     local_time.default \
-    SdkSetup
+    SdkSetup \
+    android.hardware.wifi@1.0-service
 #    lights.goldfish \
 #    gps.goldfish \
 #    fingerprint.goldfish \
 #    sensors.goldfish \
 #    android.hardware.biometrics.fingerprint@2.1-service \
-#    android.hardware.wifi@1.0-service \
 #    vibrator.goldfish \
 
 PRODUCT_PACKAGES += \
@@ -125,10 +125,11 @@ PRODUCT_AAPT_CONFIG := normal
 
 PRODUCT_COPY_FILES += \
     vendor/anbox/android/anbox-init.sh:root/anbox-init.sh \
-    frameworks/native/data/etc/android.software.freeform_window_management.xml:system/etc/permissions/android.software.freeform_window_management.xml \
-    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
+    frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml \
+    frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.software.autofill.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.autofill.xml \
-    vendor/anbox/android/anbox.xml:system/etc/permissions/anbox.xml
+    frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
+    vendor/anbox/android/anbox.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/anbox.xml
 
 PRODUCT_PACKAGES += \
     anboxd \
