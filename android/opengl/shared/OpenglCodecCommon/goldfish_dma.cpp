@@ -66,7 +66,7 @@ int goldfish_dma_create_region(uint32_t sz, struct goldfish_dma_context* res) {
         if (alloc_res) {
             ALOGE("%s: failed to allocate DMA region. errno=%d",
                   __FUNCTION__, errno);
-            close(res->fd);
+            qemu_pipe_close(res->fd);
             res->fd = -1;
             return alloc_res;
         }
