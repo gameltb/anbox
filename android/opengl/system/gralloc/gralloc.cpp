@@ -209,10 +209,10 @@ static void gralloc_dmaregion_register_ashmem_dma(gralloc_dmaregion_t* grdma, ui
     if (new_sz != grdma->sz) {
         if (new_sz > MAX_DMA_SIZE)  {
             D("%s: requested sz %u too large (limit %u), set to fallback.",
-              __func__, sz, MAX_DMA_SIZE);
+              __func__, new_sz, MAX_DMA_SIZE);
             grdma->bigbufCount++;
         } else {
-            D("%s: change sz from %u to %u", __func__, grdma->sz, sz);
+            D("%s: change sz from %u to %u", __func__, grdma->sz, new_sz);
             resize_gralloc_dmaregion_locked(grdma, new_sz);
         }
     }
