@@ -1,0 +1,186 @@
+
+project frameworks/native/
+diff --git a/frameworks/native/cmds/installd/InstalldNativeService.cpp b/frameworks/native/cmds/installd/InstalldNativeService.cpp
+index 860a68b27..64e9b55fa 100644
+--- a/frameworks/native/cmds/installd/InstalldNativeService.cpp
++++ b/frameworks/native/cmds/installd/InstalldNativeService.cpp
+@@ -331,7 +331,7 @@ static int restorecon_app_data_lazy(const std::string& path, const std::string&
+ 
+     goto done;
+ fail:
+-    res = -1;
++    res = 0;
+ done:
+     free(before);
+     free(after);
+diff --git a/frameworks/native/libs/gui/BufferQueueCore.cpp b/frameworks/native/libs/gui/BufferQueueCore.cpp
+index bb703da3d..b493de98d 100644
+--- a/frameworks/native/libs/gui/BufferQueueCore.cpp
++++ b/frameworks/native/libs/gui/BufferQueueCore.cpp
+@@ -188,6 +188,7 @@ int BufferQueueCore::getMaxBufferCountLocked(bool asyncMode,
+     int maxCount = mMaxAcquiredBufferCount + mMaxDequeuedBufferCount +
+             ((asyncMode || dequeueBufferCannotBlock) ? 1 : 0);
+     maxCount = std::min(maxBufferCount, maxCount);
++    maxCount = std::max(3, maxCount);
+     return maxCount;
+ }
+ 
+@@ -197,7 +198,7 @@ int BufferQueueCore::getMaxBufferCountLocked() const {
+ 
+     // limit maxBufferCount by mMaxBufferCount always
+     maxBufferCount = std::min(mMaxBufferCount, maxBufferCount);
+-
++    maxBufferCount = std::max(3, maxBufferCount);
+     return maxBufferCount;
+ }
+ 
+
+project hardware/libhardware/
+diff --git a/hardware/libhardware/include/hardware/hwcomposer.h b/hardware/libhardware/include/hardware/hwcomposer.h
+index 9eb1aafb..84a0b894 100644
+--- a/hardware/libhardware/include/hardware/hwcomposer.h
++++ b/hardware/libhardware/include/hardware/hwcomposer.h
+@@ -289,6 +289,9 @@ typedef struct hwc_layer_1 {
+         };
+     };
+ 
++    /* For anbox */
++    char name[128];
++
+ #ifdef __LP64__
+     /*
+      * For 64-bit mode, this struct is 120 bytes (and 8-byte aligned), and needs
+
+project prebuilts/misc/
+diff --git a/prebuilts/misc/linux-x86/flex/flex-2.5.39 b/prebuilts/misc/linux-x86/flex/flex-2.5.39
+index 7488e09..7e97444 100755
+Binary files a/prebuilts/misc/linux-x86/flex/flex-2.5.39 and b/prebuilts/misc/linux-x86/flex/flex-2.5.39 differ
+
+project system/core/
+diff --git a/system/core/init/init.cpp b/system/core/init/init.cpp
+index 4fe115e92..2324dfab5 100644
+--- a/system/core/init/init.cpp
++++ b/system/core/init/init.cpp
+@@ -469,15 +469,15 @@ static void InstallRebootSignalHandlers() {
+     action.sa_handler = [](int signal) {
+         // These signal handlers are also caught for processes forked from init, however we do not
+         // want them to trigger reboot, so we directly call _exit() for children processes here.
+-        if (getpid() != 1) {
++        //if (getpid() != 1) {
+             _exit(signal);
+-        }
++        //}
+ 
+         // Calling DoReboot() or LOG(FATAL) is not a good option as this is a signal handler.
+         // RebootSystem uses syscall() which isn't actually async-signal-safe, but our only option
+         // and probably good enough given this is already an error case and only enabled for
+         // development builds.
+-        RebootSystem(ANDROID_RB_RESTART2, "bootloader");
++        //RebootSystem(ANDROID_RB_RESTART2, "bootloader");
+     };
+     action.sa_flags = SA_RESTART;
+     sigaction(SIGABRT, &action, nullptr);
+diff --git a/system/core/init/log.cpp b/system/core/init/log.cpp
+index 6198fc25f..f52fed31c 100644
+--- a/system/core/init/log.cpp
++++ b/system/core/init/log.cpp
+@@ -54,6 +54,7 @@ static void InitAborter(const char* abort_message) {
+ 
+ void InitKernelLogging(char* argv[]) {
+     // Make stdin/stdout/stderr all point to /dev/null.
++    /*
+     int fd = open("/sys/fs/selinux/null", O_RDWR);
+     if (fd == -1) {
+         int saved_errno = errno;
+@@ -65,6 +66,7 @@ void InitKernelLogging(char* argv[]) {
+     dup2(fd, 1);
+     dup2(fd, 2);
+     if (fd > 2) close(fd);
++    */
+ 
+     android::base::InitLogging(argv, &android::base::KernelLogger, InitAborter);
+ }
+diff --git a/system/core/init/property_service.cpp b/system/core/init/property_service.cpp
+index 4172ba754..58fc7bbd9 100644
+--- a/system/core/init/property_service.cpp
++++ b/system/core/init/property_service.cpp
+@@ -318,10 +318,10 @@ class SocketConnection {
+     const ucred& cred() { return cred_; }
+ 
+     std::string source_context() const {
+-        char* source_context = nullptr;
+-        getpeercon(socket_, &source_context);
+-        std::string result = source_context;
+-        freecon(source_context);
++        //char* source_context = "";
++        //getpeercon(socket_, &source_context);
++        std::string result = "";
++        //freecon(source_context);
+         return result;
+     }
+ 
+diff --git a/system/core/init/reboot.cpp b/system/core/init/reboot.cpp
+index 328164f78..897cfd755 100644
+--- a/system/core/init/reboot.cpp
++++ b/system/core/init/reboot.cpp
+@@ -182,6 +182,7 @@ bool IsRebootCapable() {
+ void __attribute__((noreturn)) RebootSystem(unsigned int cmd, const std::string& rebootTarget) {
+     LOG(INFO) << "Reboot ending, jumping to kernel";
+ 
++    exit(0);
+     if (!IsRebootCapable()) {
+         // On systems where init does not have the capability of rebooting the
+         // device, just exit cleanly.
+diff --git a/system/core/init/service.cpp b/system/core/init/service.cpp
+index 37d3a8807..fe7b958bb 100644
+--- a/system/core/init/service.cpp
++++ b/system/core/init/service.cpp
+@@ -77,6 +77,9 @@ static Result<std::string> ComputeContextFromExecutable(const std::string& servi
+     }
+     std::unique_ptr<char> mycon(raw_con);
+ 
++    std::string my_context = mycon.get();
++    return my_context;
++
+     if (getfilecon(service_path.c_str(), &raw_filecon) == -1) {
+         return Error() << "Could not get file context";
+     }
+@@ -311,7 +314,7 @@ void Service::SetProcessAttributes() {
+     }
+     if (!seclabel_.empty()) {
+         if (setexeccon(seclabel_.c_str()) < 0) {
+-            PLOG(FATAL) << "cannot setexeccon('" << seclabel_ << "') for " << name_;
++            PLOG(INFO) << "ignored : cannot setexeccon('" << seclabel_ << "') for " << name_;
+         }
+     }
+     if (priority_ != 0) {
+diff --git a/system/core/init/subcontext.cpp b/system/core/init/subcontext.cpp
+index fdb46415d..faf3c8d08 100644
+--- a/system/core/init/subcontext.cpp
++++ b/system/core/init/subcontext.cpp
+@@ -245,7 +245,7 @@ void Subcontext::Fork() {
+         }
+ 
+         if (setexeccon(context_.c_str()) < 0) {
+-            PLOG(FATAL) << "Could not set execcon for '" << context_ << "'";
++            PLOG(INFO) << "ignored : Could not set execcon for '" << context_ << "'";
+         }
+ 
+         auto init_path = GetExecutablePath();
+diff --git a/system/core/init/util.cpp b/system/core/init/util.cpp
+index 4455b2eb1..d2ee0402d 100644
+--- a/system/core/init/util.cpp
++++ b/system/core/init/util.cpp
+@@ -89,8 +89,8 @@ int CreateSocket(const char* name, int type, bool passcred, mode_t perm, uid_t u
+                  const char* socketcon) {
+     if (socketcon) {
+         if (setsockcreatecon(socketcon) == -1) {
+-            PLOG(ERROR) << "setsockcreatecon(\"" << socketcon << "\") failed";
+-            return -1;
++            PLOG(INFO) << "ignored : setsockcreatecon(\"" << socketcon << "\") failed";
++            //return -1;
+         }
+     }
+ 
+
+
