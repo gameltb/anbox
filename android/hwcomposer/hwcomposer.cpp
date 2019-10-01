@@ -84,57 +84,23 @@ static void dump_layer(hwc_layer_1_t const* l) {
             l->displayFrame.bottom);
 }
 
-static int hwc_prepare(hwc_composer_device_1_t* dev, size_t numDisplays,
+static int hwc_prepare(hwc_composer_device_1_t* dev __unused, size_t numDisplays,
                        hwc_display_contents_1_t** displays) {
-    auto context = reinterpret_cast<HwcContext*>(dev);
+  if (!numDisplays || !displays) return 0;
 
-    if (displays == NULL || displays[0] == NULL)
-        return -EINVAL;
+  hwc_display_contents_1_t* contents = displays[HWC_DISPLAY_PRIMARY];
 
-    // Anbox only supports the primary display.
-    if (displays[0]->flags & HWC_GEOMETRY_CHANGED) {
-        const size_t& num_hw_layers = displays[0]->numHwLayers;
-        size_t i = 1;
-        bool visible = (num_hw_layers == 1);
+  if (!contents) return 0;
 
-        // Iterate backwards and skip the first (end) layer, which is the
-        // framebuffer target layer. According to the SurfaceFlinger folks, the
-        // actual location of this layer is up to the HWC implementation to
-        // decide, but is in the well know last slot of the list. This does not
-        // imply that the framebuffer target layer must be topmost.
-        for (; i < num_hw_layers; i++) {
-          hwc_layer_1_t* layer = &displays[0]->hwLayers[num_hw_layers - 1 - i];
-
-#if 0
-          dump_layer(layer);
-#endif
-
-          if (layer->flags & HWC_SKIP_LAYER) {
-            // All layers below and including this one will be drawn into the
-            // framebuffer. Stop marking further layers as HWC_OVERLAY.
-            visible = true;
-            break;
-          }
-
-          switch (layer->compositionType) {
-            case HWC_OVERLAY:
-            case HWC_FRAMEBUFFER:
-              layer->compositionType = HWC_OVERLAY;
-              break;
-            case HWC_BACKGROUND:
-              break;
-            default:
-              ALOGE("hwcomposor: Invalid compositionType %d",
-                      layer->compositionType);
-              break;
-          }
-        }
-        context->first_overlay = num_hw_layers - i;
-        context->num_overlays = i - 1;
-        context->framebuffer_visible = visible;
+  for (size_t i = 0; i < contents->numHwLayers; i++) {
+    // We do not handle any layers, so set composition type of any non
+    // HWC_FRAMEBUFFER_TARGET layer to to HWC_FRAMEBUFFER.
+    if (contents->hwLayers[i].compositionType == HWC_FRAMEBUFFER_TARGET) {
+      continue;
     }
-
-    return 0;
+    contents->hwLayers[i].compositionType = HWC_FRAMEBUFFER;
+  }
+  return 0;
 }
 
 /*
