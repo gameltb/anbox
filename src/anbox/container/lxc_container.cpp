@@ -327,7 +327,7 @@ void LxcContainer::start(const Configuration &configuration) {
 
   set_config_item("lxc.environment", "PATH=/system/bin:/system/sbin:/system/xbin");
 
-  set_config_item(lxc_config_init_cmd_key, "/anbox-init.sh");
+  set_config_item(lxc_config_init_cmd_key, "/system/vendor/bin/anbox-init.sh");
 
 #ifdef ENABLE_SNAP_CONFINEMENT
   // If we're running inside the snap environment snap-confine already created a

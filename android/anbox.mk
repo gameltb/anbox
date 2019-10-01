@@ -124,7 +124,7 @@ PRODUCT_FULL_TREBLE_OVERRIDE := true
 PRODUCT_AAPT_CONFIG := normal
 
 PRODUCT_COPY_FILES += \
-    vendor/anbox/android/anbox-init.sh:root/anbox-init.sh \
+    vendor/anbox/android/anbox-init.sh:$(TARGET_COPY_OUT_VENDOR)/bin/anbox-init.sh \
     frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.software.autofill.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.autofill.xml \
