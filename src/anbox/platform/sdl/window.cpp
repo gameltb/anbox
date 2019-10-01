@@ -59,7 +59,7 @@ Window::Window(const std::shared_ptr<Renderer> &renderer,
   // initializing GL here will cause a surface to be created and the
   // renderer will attempt to create one too which will not work as
   // only a single surface per EGLNativeWindowType is supported.
-  std::uint32_t flags = SDL_WINDOW_BORDERLESS;
+  std::uint32_t flags = 0;
   if (resizable)
     flags |= SDL_WINDOW_RESIZABLE;
 
@@ -117,21 +117,10 @@ SDL_HitTestResult Window::on_window_hit(SDL_Window *window, const SDL_Point *pt,
   SDL_GetWindowSize(window, &w, &h);
 
   const auto border_size = graphics::dp_to_pixel(window_resize_border);
-  const auto top_drag_area_height = graphics::dp_to_pixel(top_drag_area);
-  const auto button_area_width = graphics::dp_to_pixel(button_size + button_padding * 2 + button_margin * 2);
 
-  if (pt->y < top_drag_area_height) {
-    if (pt->x > w - button_area_width && pt->x < w) {
-      platform_window->close();
-      return SDL_HITTEST_NORMAL;
-    } else if (pt->x > w - button_area_width * 2 && pt->x < w - button_area_width) {
-      platform_window->switch_window_state();
-      return SDL_HITTEST_NORMAL;
-    }
-    return SDL_HITTEST_DRAGGABLE;
-  } else if (pt->x < border_size && pt->y < border_size)
+  if (pt->x < border_size && pt->y < border_size)
       return SDL_HITTEST_RESIZE_TOPLEFT;
-  else if (pt->x > window_resize_border && pt->x < w - border_size && pt->y < border_size)
+  else if (pt->x < w - border_size && pt->y < border_size)
       return SDL_HITTEST_RESIZE_TOP;
   else if (pt->x > w - border_size && pt->y < border_size)
       return SDL_HITTEST_RESIZE_TOPRIGHT;
