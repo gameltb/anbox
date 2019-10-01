@@ -102,6 +102,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     vndk-sp
 
+PRODUCT_PACKAGES += \
+    update_verifier
+
 PRODUCT_COPY_FILES += \
     vendor/anbox/android/fstab.goldfish:root/fstab.anbox \
     vendor/anbox/android/init.goldfish.rc:root/init.anbox.rc \
