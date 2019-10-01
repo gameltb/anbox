@@ -1,0 +1,49 @@
+From afd33afbd69e630ad38da7e99391b8eb5712f7f3 Mon Sep 17 00:00:00 2001
+From: gameltb <gamegccltb@gmail.com>
+Date: Tue, 1 Oct 2019 13:26:12 +0800
+Subject: [PATCH 2/2] do not trigger reboot
+
+Change-Id: Idc927ceca405bb50863090bf5f7cb1f4a649408c
+---
+ init/init.cpp   | 6 +++---
+ init/reboot.cpp | 1 +
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/init/init.cpp b/init/init.cpp
+index 4fe115e92..2324dfab5 100644
+--- a/init/init.cpp
++++ b/init/init.cpp
+@@ -469,15 +469,15 @@ static void InstallRebootSignalHandlers() {
+     action.sa_handler = [](int signal) {
+         // These signal handlers are also caught for processes forked from init, however we do not
+         // want them to trigger reboot, so we directly call _exit() for children processes here.
+-        if (getpid() != 1) {
++        //if (getpid() != 1) {
+             _exit(signal);
+-        }
++        //}
+ 
+         // Calling DoReboot() or LOG(FATAL) is not a good option as this is a signal handler.
+         // RebootSystem uses syscall() which isn't actually async-signal-safe, but our only option
+         // and probably good enough given this is already an error case and only enabled for
+         // development builds.
+-        RebootSystem(ANDROID_RB_RESTART2, "bootloader");
++        //RebootSystem(ANDROID_RB_RESTART2, "bootloader");
+     };
+     action.sa_flags = SA_RESTART;
+     sigaction(SIGABRT, &action, nullptr);
+diff --git a/init/reboot.cpp b/init/reboot.cpp
+index 328164f78..897cfd755 100644
+--- a/init/reboot.cpp
++++ b/init/reboot.cpp
+@@ -182,6 +182,7 @@ bool IsRebootCapable() {
+ void __attribute__((noreturn)) RebootSystem(unsigned int cmd, const std::string& rebootTarget) {
+     LOG(INFO) << "Reboot ending, jumping to kernel";
+ 
++    exit(0);
+     if (!IsRebootCapable()) {
+         // On systems where init does not have the capability of rebooting the
+         // device, just exit cleanly.
+-- 
+2.23.0
+

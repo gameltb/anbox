@@ -1,0 +1,26 @@
+From db6fab8d6f202ae78fe5e5f81f0d1c14d8e9bfc2 Mon Sep 17 00:00:00 2001
+From: gameltb <gamegccltb@gmail.com>
+Date: Mon, 30 Sep 2019 23:41:58 +0800
+Subject: [PATCH 4/4] SELinux : for no SELinux
+
+Change-Id: I2a9c9a026028fea4872b0bac94846f6d966564c5
+---
+ cmds/installd/InstalldNativeService.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmds/installd/InstalldNativeService.cpp b/cmds/installd/InstalldNativeService.cpp
+index 860a68b27..64e9b55fa 100644
+--- a/cmds/installd/InstalldNativeService.cpp
++++ b/cmds/installd/InstalldNativeService.cpp
+@@ -331,7 +331,7 @@ static int restorecon_app_data_lazy(const std::string& path, const std::string&
+ 
+     goto done;
+ fail:
+-    res = -1;
++    res = 0;
+ done:
+     free(before);
+     free(after);
+-- 
+2.23.0
+

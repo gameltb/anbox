@@ -1,0 +1,27 @@
+From ba0d1638937efee8b9a47fd0d15d177cf6478c5b Mon Sep 17 00:00:00 2001
+From: gameltb <gamegccltb@gmail.com>
+Date: Tue, 1 Oct 2019 13:27:42 +0800
+Subject: [PATCH] Add layer name for anbox hwc
+
+Change-Id: I067034a4a811182f4d928a58056eb530a7dcd115
+---
+ include/hardware/hwcomposer.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/hardware/hwcomposer.h b/include/hardware/hwcomposer.h
+index 9eb1aafb..84a0b894 100644
+--- a/include/hardware/hwcomposer.h
++++ b/include/hardware/hwcomposer.h
+@@ -289,6 +289,9 @@ typedef struct hwc_layer_1 {
+         };
+     };
+ 
++    /* For anbox */
++    char name[128];
++
+ #ifdef __LP64__
+     /*
+      * For 64-bit mode, this struct is 120 bytes (and 8-byte aligned), and needs
+-- 
+2.23.0
+

@@ -1,0 +1,34 @@
+From 677a9fbcc0c93d988c8feebc295a692a407e4742 Mon Sep 17 00:00:00 2001
+From: gameltb <gamegccltb@gmail.com>
+Date: Mon, 30 Sep 2019 23:37:47 +0800
+Subject: [PATCH 3/4] fix eglSwapBuffers
+
+Change-Id: Ib43ff62dad9b44eadff36863f3265549ee93eb1c
+---
+ libs/gui/BufferQueueCore.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libs/gui/BufferQueueCore.cpp b/libs/gui/BufferQueueCore.cpp
+index bb703da3d..b493de98d 100644
+--- a/libs/gui/BufferQueueCore.cpp
++++ b/libs/gui/BufferQueueCore.cpp
+@@ -188,6 +188,7 @@ int BufferQueueCore::getMaxBufferCountLocked(bool asyncMode,
+     int maxCount = mMaxAcquiredBufferCount + mMaxDequeuedBufferCount +
+             ((asyncMode || dequeueBufferCannotBlock) ? 1 : 0);
+     maxCount = std::min(maxBufferCount, maxCount);
++    maxCount = std::max(3, maxCount);
+     return maxCount;
+ }
+ 
+@@ -197,7 +198,7 @@ int BufferQueueCore::getMaxBufferCountLocked() const {
+ 
+     // limit maxBufferCount by mMaxBufferCount always
+     maxBufferCount = std::min(mMaxBufferCount, maxBufferCount);
+-
++    maxBufferCount = std::max(3, maxBufferCount);
+     return maxBufferCount;
+ }
+ 
+-- 
+2.23.0
+
