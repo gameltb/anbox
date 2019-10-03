@@ -1,0 +1,55 @@
+From e5411c83512dccb431585f424a599f749930fcd5 Mon Sep 17 00:00:00 2001
+From: gameltb <gamegccltb@gmail.com>
+Date: Thu, 3 Oct 2019 23:51:34 +0800
+Subject: [PATCH 3/3] qemu: use a local socket rather than a dev node
+
+Change-Id: Ie23c801319865102b05ed62f3cb22259cdf8e1e7
+---
+ qemu_pipe/qemu_pipe.cpp | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/qemu_pipe/qemu_pipe.cpp b/qemu_pipe/qemu_pipe.cpp
+index beeccb07f..e881a982a 100644
+--- a/qemu_pipe/qemu_pipe.cpp
++++ b/qemu_pipe/qemu_pipe.cpp
+@@ -24,6 +24,9 @@
+ 
+ #include <android-base/file.h>
+ 
++#include <sys/socket.h>
++#include <sys/un.h>
++
+ using android::base::ReadFully;
+ using android::base::WriteFully;
+ 
+@@ -41,7 +44,27 @@ int qemu_pipe_open(const char* pipeName) {
+         return -1;
+     }
+ 
++#if 0
+     int fd = TEMP_FAILURE_RETRY(open("/dev/qemu_pipe", O_RDWR));
++#else
++    int fd = socket(AF_LOCAL, SOCK_STREAM, 0);
++
++    struct sockaddr_un addr;
++    memset(&addr, 0, sizeof(addr));
++    addr.sun_family = AF_UNIX;
++    strncpy(addr.sun_path, "/dev/qemu_pipe", sizeof(addr.sun_path));
++
++    if (connect(fd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
++#if !defined(QEMU_PIPE_FROM_ADB)
++      close(fd);
++#else
++      // Adb renames 'close' to 'unix_close' and marks the original
++      // 'close' as not available.
++      unix_close(fd);
++#endif
++      fd = -1;
++    }
++#endif
+     if (fd < 0) {
+         QEMU_PIPE_DEBUG("%s: Could not open /dev/qemu_pipe: %s", __FUNCTION__,
+                         strerror(errno));
+-- 
+2.23.0
+

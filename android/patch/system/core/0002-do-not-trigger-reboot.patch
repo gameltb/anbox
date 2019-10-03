@@ -1,7 +1,7 @@
 From afd33afbd69e630ad38da7e99391b8eb5712f7f3 Mon Sep 17 00:00:00 2001
 From: gameltb <gamegccltb@gmail.com>
 Date: Tue, 1 Oct 2019 13:26:12 +0800
-Subject: [PATCH 2/2] do not trigger reboot
+Subject: [PATCH 2/3] do not trigger reboot
 
 Change-Id: Idc927ceca405bb50863090bf5f7cb1f4a649408c
 ---
