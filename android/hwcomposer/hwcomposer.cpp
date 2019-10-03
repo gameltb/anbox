@@ -112,10 +112,8 @@ static void check_sync_fds(size_t numDisplays, hwc_display_contents_1_t** displa
     unsigned int i, j;
     for (i = 0; i < numDisplays; i++) {
         hwc_display_contents_1_t* list = displays[i];
-        if (!list) {
-          ALOGW("displays[%u] was null", i);
-          continue;
-        }
+        if (!list)
+            continue;
         if (list->retireFenceFd >= 0) {
             ALOGW("retireFenceFd[%u] was %d", i, list->retireFenceFd);
             list->retireFenceFd = -1;
@@ -140,8 +138,6 @@ static int hwc_set(hwc_composer_device_1_t* dev, size_t numDisplays,
                    hwc_display_contents_1_t** displays) {
     auto context = reinterpret_cast<HwcContext*>(dev);
 
-    ALOGE("numDisplays %d\n", numDisplays);
-
     if (displays == NULL || displays[0] == NULL)
         return -EFAULT;
 
@@ -150,13 +146,8 @@ static int hwc_set(hwc_composer_device_1_t* dev, size_t numDisplays,
     for (size_t i = 0 ; i < displays[0]->numHwLayers ; i++) {
         const auto layer = &displays[0]->hwLayers[i];
 
-        if (layer->flags & HWC_SKIP_LAYER ||
-            layer->flags & HWC_IS_CURSOR_LAYER)
-            continue;
-
-#if 0
-        dump_layer(layer);
-#endif
+        if (layer->flags & HWC_SKIP_LAYER)
+          continue;
 
         // FIXME this is just dirty ... but layer->handle is a const native_handle_t and canBePosted
         // can't be called with a const.
