@@ -13,7 +13,7 @@
 # limitations under the License.
 
 get_filename_component(
-  PREBUILT_ROOT "${ANDROID_QEMU2_TOP_DIR}/../../prebuilts/android-emulator-build/common/ANGLE/${ANDROID_TARGET_TAG}"
+  PREBUILT_ROOT "${ANDROID_QEMU2_TOP_DIR}/android/common-refs_heads_emu-29.0-release-ANGLE-linux-x86_64"
   ABSOLUTE)
 
 set(ANGLE_INCLUDE_DIRS "${PREBUILT_ROOT}/include")

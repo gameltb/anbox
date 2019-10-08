@@ -372,6 +372,7 @@ target_link_libraries(anbox-core
   renderControl_dec
   OpenGLESDispatch
   OpenglCodecCommon
+  OpenglRender_standalone_common
   anbox-protobuf
   xdg)
 

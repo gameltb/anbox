@@ -1,14 +1,14 @@
 prebuilt(ANGLE)
-prebuilt(VULKAN)
+# prebuilt(VULKAN)
 
 add_subdirectory(vulkan/cereal/proto)
 
 # Adds the proper graphic driver dependencies to the given target.
 function(add_opengl_dependencies TGT)
   # And setup the depedencies
-  android_target_dependency(${TGT} all SWIFTSHADER_DEPENDENCIES)
-  android_target_dependency(${TGT} all VULKAN_DEPENDENCIES)
-  android_target_dependency(${TGT} all VULKAN_TEST_DEPENDENCIES)
+#   android_target_dependency(${TGT} all SWIFTSHADER_DEPENDENCIES)
+#   android_target_dependency(${TGT} all VULKAN_DEPENDENCIES)
+#   android_target_dependency(${TGT} all VULKAN_TEST_DEPENDENCIES)
   android_target_properties(${TGT} linux-x86_64 "LINK_FLAGS>=-Wl,-rpath,'$ORIGIN/lib64/gles_swiftshader'")
   android_target_properties(${TGT} darwin-x86_64 "INSTALL_RPATH>=@loader_path/lib64/gles_swiftshader")
 endfunction()
@@ -131,11 +131,11 @@ set(OpenglRender_standalone_common_src
     WindowSurface.cpp
     YUVConverter.cpp
     ../Translator/GLES_V2/ANGLEShaderParser.cpp
-    standalone_common/SampleApplication.cpp
+    # standalone_common/SampleApplication.cpp
     standalone_common/SearchPathsSetup.cpp
     standalone_common/ShaderUtils.cpp)
 set(OpenglRender_standalone_common_darwin-x86_64_src NativeSubWindow_cocoa.m)
-set(OpenglRender_standalone_common_linux-x86_64_src NativeSubWindow_x11.cpp)
+# set(OpenglRender_standalone_common_linux-x86_64_src NativeSubWindow_x11.cpp)
 set(OpenglRender_standalone_common_windows_src NativeSubWindow_win32.cpp)
 android_add_library(OpenglRender_standalone_common)
 
@@ -143,12 +143,14 @@ target_link_libraries(OpenglRender_standalone_common
                               PUBLIC
                               OpenglCodecCommon
                               emugl_common
-                              OpenglRender
+                              GLcommon
+                            #   OpenglRender
                               GLESv1_dec
                               GLESv2_dec
                               renderControl_dec
                               OpenglRender_vulkan
-                              OSWindow)
+                            #   OSWindow
+                              )
 target_link_libraries(OpenglRender_standalone_common PRIVATE emugl_base ANGLE::ANGLE)
 target_compile_options(OpenglRender_standalone_common PRIVATE -fvisibility=hidden)
 android_target_compile_definitions(OpenglRender_standalone_common windows PRIVATE -DVK_USE_PLATFORM_WIN32_KHR)

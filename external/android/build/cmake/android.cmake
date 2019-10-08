@@ -387,7 +387,7 @@ function(android_add_protobuf name protofiles)
   protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${protofiles})
   set(${name}_src ${PROTO_SRCS} ${PROTO_HDRS})
   android_add_library(${name})
-  target_link_libraries(${name} PUBLIC libprotobuf)
+  target_link_libraries(${name} PUBLIC protobuf)
   target_include_directories(${name} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
   # Disable generation of information about every class with virtual functions for use by the C++ runtime type
   # identification features (dynamic_cast and typeid). If you don't use those parts of the language, you can save some
@@ -404,7 +404,7 @@ function(android_add_big_protobuf name protofiles)
   protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${protofiles})
   set(${name}_src ${PROTO_SRCS} ${PROTO_HDRS})
   android_add_library(${name})
-  target_link_libraries(${name} PUBLIC libprotobuf)
+  target_link_libraries(${name} PUBLIC protobuf)
   target_include_directories(${name} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
   # Disable generation of information about every class with virtual functions for use by the C++ runtime type
   # identification features (dynamic_cast and typeid). If you don't use those parts of the language, you can save some

@@ -11,5 +11,6 @@ include(android)
 
 set(ANDROID_QEMU2_TOP_DIR ${CMAKE_CURRENT_LIST_DIR}/../)
 
+add_subdirectory(${ANDROID_QEMU2_TOP_DIR}/astc-codec astc-codec)
 add_subdirectory(android-emu)
 add_subdirectory(android-emugl)
